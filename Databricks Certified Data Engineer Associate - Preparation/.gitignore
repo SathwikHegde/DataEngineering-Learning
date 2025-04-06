@@ -1,0 +1,41 @@
+# Byte-compiled / package files
+__pycache__/
+*.py[cod]
+*.so
+*.swp
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
+.env/
+*.env
+
+# Databricks workspace artifacts
+.db/
+*.dbc
+databricks/
+workspace/
+.notebooks/
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+*.bak
+
+# Dataset and output files
+data/
+*.csv
+*.parquet
+*.json
+*.xlsx
+*.db
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# MacOS system files
+.DS_Store
