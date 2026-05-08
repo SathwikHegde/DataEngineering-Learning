@@ -1,47 +1,76 @@
-# Section 3: Introduction to Databricks Lakehouse Platform
+# Section 4: Databricks Workspace Components
 
-This section provides the architectural foundation of the course. You will move beyond basic cloud setup to understand the core philosophy of the **Data Lakehouse**—the paradigm shift that combines the low-cost storage of a data lake with the performance and structure of a data warehouse.
+This section is the "engine room" of the course. You will move from architectural theory to hands-on proficiency with the specific tools and interfaces used by Data Engineers every day. By the end of this module, you will be able to configure high-performance compute, leverage advanced notebook features, and implement professional version control workflows.
 
 ---
 
 ## Section Modules
 
-### 9. Data Lakehouse Overview (11 min)
-* **The Problem:** Traditional "Two-Tier" architectures (Data Lake + Data Warehouse) lead to data silos, stale data, and complex ETL.
-* **The Solution:** The Lakehouse Platform.
-* **Key Features:** Support for ACID transactions via **Delta Lake**, independent scaling of compute and storage, and support for diverse workloads (BI, ML, and Streaming) on a single copy of data.
+### 14. Databricks Architecture Overview (8 min)
 
-### 10. Introduction to Medallion Architecture (5 min)
-A deep dive into the industry-standard "multi-hop" data design pattern:
-* **Bronze (Raw):** Ingesting data exactly as-is from source systems.
-* **Silver (Filtered/Cleaned):** Applying schema enforcement, cleaning nulls, and joining tables to create a "Single Source of Truth."
-* **Gold (Business-Ready):** Final aggregations and feature tables optimized for dashboards and machine learning models.
+* **Plane Separation:** Understanding the distinction between the **Control Plane** (hosted by Databricks) and the **Data Plane** (hosted in your Azure subscription).
+* **The 2026 Shift:** Introduction to **Serverless Workspaces**, which are now Generally Available (GA), offering a fully managed SaaS experience where Databricks handles the infrastructure scaling and security patching.
 
-### 11. Databricks Overview (7 min)
-Understanding the Databricks ecosystem as a unified **Data Intelligence Platform**:
-* **The Foundation:** Built on open-source technologies like Apache Spark™, Delta Lake, and MLflow.
-* **Unified Governance:** Introduction to **Unity Catalog** for managing data and AI assets across your entire organization.
-* **AI Integration:** How the "Data Intelligence" layer uses generative AI to simplify SQL writing and data discovery.
+### 15. Introduction to Databricks Compute (4 min)
 
-### 12. Creating Azure Databricks Service (5 min)
-Step-by-step walkthrough in the Azure Portal:
-* **Deployment:** Navigating the Azure Marketplace to create a workspace.
-* **Pricing Tiers:** Choosing between **Standard** and **Premium** (Premium is required for Unity Catalog and advanced security).
-* **Managed Resource Groups:** Understanding how Azure automatically manages the virtual network and storage behind your workspace.
+* **Compute Types:** A breakdown of **All-Purpose Compute** (for interactive development), **Job Compute** (automated, cost-efficient for production), and **SQL Warehouses** (optimized for BI).
+* **Serverless vs. Classic:** Why serverless is becoming the default for notebooks and Lakeflow jobs due to instant start times and zero-management overhead.
 
-### 13. Databricks User Interface Overview (7 min)
-Navigating the 2026 Workspace interface:
-* **Persona Switcher:** Toggling between Data Engineering, Databricks SQL, and Machine Learning views.
-* **Sidebar Navigation:** Accessing the Catalog Explorer, Workflows (Jobs), and Compute management.
-* **Global Search:** Using the AI-powered search to find tables, notebooks, and documentation instantly.
+### 16. Databricks Cluster Configuration (8 min)
+
+* **Sizing & Scaling:** Best practices for setting worker types, enabling **Autoscaling**, and configuring **Autotermination** (recommended 15–30 mins) to prevent runaway costs.
+* **Policy & Governance:** Using **Compute Policies** to restrict cluster creation to specific VM sizes and enforce tagging for cost attribution.
+
+### 17. Create Databricks Cluster (13 min)
+
+* **Hands-on Lab:** Step-by-step creation of your first interactive cluster.
+* **Runtime Selection:** Choosing the appropriate **Databricks Runtime (DBR)** (e.g., DBR 18.0+) to access the latest Spark features and security updates.
+
+### 18. Troubleshooting Databricks Cluster Quota and VM Issues (8 min)
+
+* **Azure Quotas:** Resolving the common "Quota Exceeded" error by requesting core increases in the Azure Portal or switching to lower-footprint VM types like `Standard_DS3_v2`.
+* **Regional Availability:** How to identify if a specific VM family is unavailable in your chosen region.
+
+### 19. Databricks Notebooks (15 min)
+
+* **Collaborative Authoring:** Real-time co-authoring and commenting.
+* **The Data Science Agent:** Using the new AI-powered assistant to generate EDA (Exploratory Data Analysis) code and visualize datasets with natural language prompts.
+* **New in 2026:** Direct image pasting into Markdown and the "Tab Session Restore" feature for managing multiple active workflows.
+
+### 20. Databricks Magic Commands (13 min)
+
+* **Language Mixing:** Using `%sql`, `%python`, `%scala`, and `%r` within the same notebook.
+* **System Commands:** `%sh` for shell scripts, `%fs` for file system exploration, and `%pip` for notebook-scoped library installation.
+* **Profiling Magics:** Introduction to `%%profile` and `%%oprofile` (Runtime 17.2+) for deep-dive performance analysis of your Python code.
+
+### 21. Databricks Utilities (9 min)
+
+* **dbutils:** Mastering the core utility library.
+* `dbutils.fs`: Managing the Databricks File System (DBFS).
+* `dbutils.secrets`: Securely retrieving credentials from Azure Key Vault.
+* `dbutils.widgets`: Creating parameterized notebooks for dynamic inputs.
+
+
+
+### 22 & 23. Databricks Git Folders (Repos) & Demo (4 min + 16 min)
+
+* **The Transition:** Understanding the shift from "Repos" to the more robust **Git folders** interface.
+* **Full Git Lifecycle:** A live demo of cloning a repo, branch management, committing changes, and resolving merge conflicts directly in the UI.
+* **Web Terminal:** Using the integrated terminal for advanced Git CLI operations like `git stash` and `git rebase`.
+
+### 24. Debugging Databricks Notebooks (16 min)
+
+* **Integrated Testing:** Utilizing the new **Tests Sidebar** for running pytest-based unit tests within your workspace.
+* **Visual Debugging:** Using line numbering and the Spark UI to identify bottlenecks in wide transformations or skewed data.
 
 ---
 
-## Key Takeaways for Data Engineers
-1.  **Serverless First:** In 2026, Databricks defaults to **Serverless Compute**. It removes the need for manual cluster configuration, allowing you to focus on code while the platform handles the infrastructure scaling.
-2.  **Schema Evolution:** Remember that while Bronze is often schema-less, the transition to Silver is where you must define and enforce data quality.
-3.  **Compute Awareness:** Always be mindful of your **DBU (Databricks Unit)** consumption when testing notebooks to stay within your Azure credits.
+## 💡 Pro-Tips for Section 4
+
+1. **Use Serverless for Labs:** To maximize your $200 Azure credit, use **Serverless compute** whenever possible—it starts in seconds and you only pay for the exact duration your code runs.
+2. **Tag Everything:** Always add a "Project" or "Owner" tag in your cluster configuration. This makes it significantly easier to track spending in the **Lakeflow System Tables**.
+3. **Git-First Workflow:** Never write code in a standalone workspace folder. Always create a **Git folder** first to ensure your work is versioned and safe from accidental deletion.
 
 ---
 
-[Next Section: Managing Databricks Compute & Clusters →](./section4-readme.md)
+[Next Section: Data Ingestion with Auto Loader & Spark →](https://www.google.com/search?q=./section5-readme.md)

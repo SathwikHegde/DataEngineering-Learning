@@ -1,60 +1,30 @@
-# Databricks Certified Data Engineer Associate - Ultimate Prep (2026 Edition)
+# Section 2: Azure Subscription
 
-This repository contains study materials, code snippets, and architectural diagrams designed to help you master the **Databricks Certified Data Engineer Associate** exam. Based on the 2026 curriculum, this guide covers the transition from legacy workflows to modern Lakeflow standards and Unity Catalog-driven governance.
-
----
-
-## Course Overview
-* **Rating:** ⭐ 4.7/5 (3,700+ reviews)
-* **Total Content:** 20 Hours of HD Video
-* **Students Enrolled:** 25,500+
-* **Last Updated:** April 2026
-* **Included:** Full-length practice exams with detailed explanations and 320+ downloadable slides.
+This section of the **Databricks Certified Data Engineer Associate** preparation guide focuses on setting up your cloud environment. Since Databricks is often deployed within the Azure ecosystem, having a functional Azure subscription is the first step toward hands-on practice with Databricks workspaces and data storage.
 
 ---
 
-## 🛠 Key Learning Objectives
+## Environment Setup
 
-### 1. Lakehouse Architecture & Ingestion
-* **Medallion Architecture:** Designing Bronze, Silver, and Gold layers for scalable data reliability.
-* **Auto Loader:** Implementing incremental data ingestion from cloud storage with schema inference and evolution.
-* **Lakehouse Federation:** Querying external data sources (PostgreSQL, Snowflake, etc.) directly without moving data.
+### 7. Creating Azure Free Account (6 min)
+Learn how to sign up for an Azure account to host your Databricks clusters. As of **May 2026**, the Azure Free Account includes:
+* **$200 Credit:** To be used within the first 30 days on any Azure service.
+* **12 Months of Popular Services:** Free monthly amounts for services like SQL databases and Virtual Machines.
+* **Always-Free Services:** Access to 55+ services (including Azure Functions and Cosmos DB) that remain free beyond the initial trial.
 
-### 2. Data Processing & ETL
-* **Apache Spark:** Leveraging Spark SQL and PySpark for complex transformations and User Defined Functions (UDFs).
-* **Delta Lake:** Deep dive into ACID transactions, schema enforcement, and performance tuning (Z-Ordering, Liquid Clustering).
-* **Lakeflow Spark Declarative Pipelines (formerly DLT):** Building production-grade streaming and batch pipelines with built-in data quality expectations.
-
-### 3. Production & DevOps
-* **Databricks Asset Bundles (DABs):** Implementing Infrastructure-as-Code (IaC) to deploy and manage workspace resources.
-* **Lakeflow Jobs:** Orchestrating multi-task workflows with retry logic, dependencies, and repair-and-rerun capabilities.
-* **Git Integration:** Best practices for version control and collaborating within Databricks Repos.
-
-### 4. Governance & Security
-* **Unity Catalog:** Managing a three-tier namespace (Catalog > Schema > Table), data lineage, and fine-grained access control.
-* **Delta Sharing:** Sharing data securely across different organizations or cloud regions without replication.
-* **Databricks SQL:** Configuring Serverless SQL Warehouses, creating alerts, and building executive dashboards.
+### 8. Azure Portal Overview (4 min)
+A guided tour of the **Azure Portal (2026 Edition)** interface. Key focus areas include:
+* **Resource Groups:** Creating logical containers for your Databricks assets.
+* **Global Search:** Quickly finding "Azure Databricks" and "Storage Accounts."
+* **Marketplace:** Deploying the Databricks managed service.
+* **Cost Management:** Monitoring your $200 credit to ensure you don't exceed free limits.
 
 ---
 
-## Course Curriculum Breakdown
-
-| Domain | Key Topics |
-| :--- | :--- |
-| **Data Intelligence Platform** | Lakehouse Fundamentals, Serverless vs. Classic Compute, Workspace Components |
-| **Development & Ingestion** | Auto Loader, Spark UI, Databricks Connect, Lakehouse Federation |
-| **Data Processing** | Delta Lake Operations (MERGE, OPTIMIZE), Spark SQL, Stream-to-Batch patterns |
-| **Production Pipelines** | Lakeflow SDP, DABs, Task Orchestration, Failure Handling |
-| **Governance & Quality** | Unity Catalog Permissions, Delta Sharing, Data Quality Expectations |
+## Pro Tips for This Section
+1.  **Identity Verification:** You will need a valid credit card or debit card for identity verification during sign-up, though you won't be charged unless you manually upgrade to a "Pay-As-You-Go" plan after your credits expire.
+2.  **Naming Conventions:** When creating your first Resource Group, use a consistent naming convention (e.g., `rg-databricks-prep-01`) to keep your learning environment organized.
+3.  **Region Selection:** Choose an Azure region closest to your physical location to minimize latency and ensure resource availability.
 
 ---
 
-## Getting Started
-1.  **Clone the Repo:** `git clone https://github.com/your-username/databricks-prep-2026.git`
-2.  **Review the Slides:** Access the `slides/` directory for the comprehensive 320-page guide.
-3.  **Hands-on Labs:** Follow the notebooks in the `labs/` folder to build a full Medallion pipeline.
-4.  **Practice Exams:** Test your knowledge with the mock tests in the `exams/` directory to simulate the 45-question, 90-minute certification environment.
-
-[Databricks Data Engineer Associate — Key Concepts You MUST Know to Pass 2026 Guide](https://www.youtube.com/watch?v=NOE0pwc-DCU)
-
-This video provides a focused breakdown of the 2026 exam domains, specifically highlighting the shift toward Lakeflow and Databricks Asset Bundles.
