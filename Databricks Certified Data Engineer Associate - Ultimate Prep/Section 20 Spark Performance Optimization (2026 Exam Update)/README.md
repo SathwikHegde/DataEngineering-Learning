@@ -48,4 +48,4 @@ $$\text{Application} \longrightarrow \text{Job} \longrightarrow \text{Stage} \lo
 
 ---
 
-[Back to Course Introduction & Overview →](https://www.google.com/search?q=./README.md)
+[Back to Course Introduction & Overview →](./README.md)
