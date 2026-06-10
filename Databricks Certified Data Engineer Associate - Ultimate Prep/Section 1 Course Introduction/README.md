@@ -7,7 +7,7 @@ Welcome to the **Databricks Certified Data Engineer Associate** preparation repo
 ## Course at a Glance
 * **Total Content:** 20 Hours of HD Video
 * **Students:** 25,500+
-* **Rating:** ⭐ 4.7/5
+* **Rating:** 4.7/5
 * **Focus:** Production-grade ETL, Unity Catalog, and Medallion Architecture.
 
 ---
@@ -26,7 +26,7 @@ This section focuses on preparing your environment and gathering the necessary m
 
 ---
 
-## 🛠 What You'll Learn
+## What You'll Learn
 The curriculum is designed to take you from a basic understanding of Spark to deploying complex production pipelines.
 
 ### **Core Architecture**
