@@ -24,11 +24,11 @@ This final section completes your journey through the **Databricks Certified Dat
 * **Exam Logistics**:
 * **Format**: 45 multiple-choice questions (scenario-driven, code-parsing, and architectural choice evaluations).
 * **Duration**: 90-minute strict testing window (averaging 2 minutes per question).
-* **Passing Threshold**: 70% scale score required to secure certification status.
+* **Passing Threshold**: 70% scaled score required to secure certification status.
 * **Delivery Modes**: Onsite at a physical Kryterion/Pearson VUE testing center or via an online proctored web-lockdown environment.
 
 
-* **Core Blueprint weight distribution for 2026**:
+* **Core Blueprint Weight Distribution for 2026**:
 1. **Databricks Tooling & Platform Architecture (~24%)**: Compute sizing metrics, language-mixing Magic Commands, cluster permission scopes, and integrated Git Folders.
 2. **Data Ingestion & Extraction (~28%)**: Incremental streaming with Auto Loader, SQL/PySpark batch readers, and managed serverless **Lakeflow Connect** pipelines.
 3. **Data Processing & Transformation (~22%)**: Delta transaction logging, ACID properties, time travel parameters, narrow vs. wide transformations, and **Liquid Clustering (`CLUSTER BY`)** layout rules.
@@ -63,7 +63,7 @@ Databricks exams frequently test architectural modernization boundaries. If a qu
 * Reject **Hive-style Physical Folder Partitioning** or manual **Z-Ordering** in favor of dynamic **Liquid Clustering (`CLUSTER BY`)**.
 * Reject **DBFS Root (`dbfs:/`) direct file access** in favor of secure **Unity Catalog Volumes**.
 
-### 3. Diagnose Topology Bottle-necks via Task Metrics
+### 3. Diagnose Topology Bottlenecks via Task Metrics
 
 Scenario questions frequently prompt you to identify issues based on cluster execution profiles. Keep this diagnostic rule memorized:
 
@@ -72,6 +72,6 @@ Scenario questions frequently prompt you to identify issues based on cluster exe
 
 ---
 
-Congratulations on completing all core technical modules of the ultimate preparation path. You are now fully equipped with the theoretical frameworks, distributed execution models, and data governance standards required to pass your certification on the first attempt!
+Congratulations on completing all core technical modules of the ultimate preparation path. You are now fully equipped with the theoretical foundations, distributed execution models, and data governance standards required to pass your certification on the first attempt!
 
 [← Back to Section 24: Databricks SQL Warehouse](https://www.google.com/search?q=./section24-readme.md) | [Back to Master Repository Index](https://www.google.com/search?q=./README.md)
