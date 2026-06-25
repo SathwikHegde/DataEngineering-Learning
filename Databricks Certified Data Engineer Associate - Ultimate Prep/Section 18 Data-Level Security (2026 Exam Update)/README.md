@@ -18,12 +18,12 @@ Refer to **image_5e6b09.png** for the chronological lesson sequence covered in t
 
 ### 127. Data-Level Security Overview (6 min)
 
-* **The Traditional Bottleneck**: Historically, separating sensitive employee records or restricted regional metrics required building and maintaining entirely separate physical tables for distinct user groups.
-* **The Unified Solution**: Modern data-level security abstracts security rules away from physical storage. It uses intelligent runtime evaluation to automatically hide or alter records based on who is querying the data.
+* **The Traditional Bottleneck**: Historically, separating sensitive employee records or restricted regional metrics required building and maintaining entirely separate physical tables and storage buckets for distinct user groups.
+* **The Unified Solution**: Modern data-level security abstracts compliance rules away from physical storage layouts. It uses intelligent runtime evaluation to automatically hide, filter, or alter records based on the security footprint of the person querying the data.
 
 ### 128. Data-Level Security Using Dynamic Views (14 min)
 
-* **Dynamic Scoping**: Using functional built-in context functions inside classic SQL view structures to evaluate user permissions during query execution.
+* **Dynamic Scoping**: Using functional, built-in context functions inside classic SQL view structures to evaluate user permissions during query execution.
 * **Core Security Functions**:
 * `is_account_group_member()`: Validates if the current user belongs to an identity group synchronized at the account tier.
 * `current_user()`: Pulls the explicit email address string of the person executing the query cell.
@@ -43,11 +43,9 @@ FROM production.silver.base_payroll;
 
 ```
 
-
-
 ### 129. Data-Level Security Using Row Filters and Column Masks (13 min)
 
-* **Decoupling Policies**: Moving beyond dynamic views by attaching security logic directly to the physical underlying Unity Catalog table itself. This ensures the protection persists regardless of how or where the table is accessed.
+* **Decoupling Policies**: Moving beyond dynamic views by attaching security logic directly to the physical underlying Unity Catalog table itself. This ensures the protection persists regardless of how or where the table is accessed (BI tools, notebooks, or external API endpoints).
 * **Row Filters**: Automatically restricting table records horizontally based on a conditional column characteristic (e.g., a field agent only sees rows matching their assigned `region_id`).
 * **Column Masks**: Altering values vertically inside a specific column without modifying the actual underlying physical Parquet records on disk.
 * **Code Implementation Pattern**:
@@ -64,6 +62,7 @@ ALTER TABLE production.silver.customer_profiles
 ALTER COLUMN social_security_number SET MASK governance.policies.mask_ssn;
 
 ```
+
 ### 130. Data-Level Security Using ABAC Policies and Governed Tags (21 min)
 
 * **Attribute-Based Access Control (ABAC)**: Transitioning from rigid Role-Based policies (RBAC) to highly flexible, scalable identity-and-attribute tagging logic.
@@ -74,10 +73,10 @@ ALTER COLUMN social_security_number SET MASK governance.policies.mask_ssn;
 
 ## Important Exam Considerations
 
-* **Performance Considerations**: Row filters and column masks are evaluated on serverless or interactive compute clusters at query compile time. They leverage the **Catalyst Optimizer** to push down filters into the storage layer, ensuring security rules don't cause significant query bottlenecks.
+* **Performance and Pushdowns**: Row filters and column masks are evaluated on serverless or interactive compute clusters at query compile time. They leverage the **Catalyst Optimizer** to push down filters directly into the cloud storage layer, ensuring security rules don't cause significant query bottlenecks.
 * **Owner Overrides**: Be aware that the explicit **Owner** of a table (the principal identity or group that created it) is typically immune to localized row filters and column masks unless explicitly specified within the policy logic.
 * **Nesting Limitations**: You cannot apply multiple distinct Column Masks to the exact same column simultaneously. If complex conditional branches are needed, they must be contained within a single, unified SQL security function logic framework.
 
 ---
 
-[Back to Course Introduction & Setup →](https://www.google.com/search?q=./README.md)
+[← Back to Section 17: Data Governance with Unity Catalog](https://www.google.com/search?q=./section17-readme.md) | [Next Section: Section 19: Advanced Sharing & Lakehouse Federation →](https://www.google.com/search?q=./section19-readme.md)
