@@ -37,8 +37,6 @@ df = delta_sharing.load_as_pandas(client.list_all_tables()[0])
 
 ```
 
-
-
 ### 134 & 135. Introduction to Lakehouse Federation & Demo (7 min + 12 min)
 
 * **Distributed Data Virtualization**: Configuring **Lakehouse Federation** to query external database engines (such as PostgreSQL, MySQL, Snowflake, Azure SQL, or AWS Redshift) natively from your workspace without moving the data.
