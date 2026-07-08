@@ -1,59 +1,67 @@
 # Section 11: Spark Structured Streaming
 
-This section introduces **Spark Structured Streaming**, the scalable and fault-tolerant stream processing engine built on the Spark SQL engine. In 2026, the focus has shifted toward high-performance, low-latency "Lakeflow" patterns and advanced recovery mechanisms. Mastering these four modules is essential for handling real-time data ingestion and processing in a production Lakehouse environment.
+This section introduces **Spark Structured Streaming**, the scalable, fault-tolerant stream processing engine built natively on the Spark SQL optimization core. In 2026, production focus has fully shifted toward high-performance, low-latency "Lakeflow" streaming patterns and advanced asynchronous recovery mechanisms. Mastering these operational modules is essential for executing real-time data ingestion and event processing inside an enterprise Lakehouse environment.
+
+Refer to your course player dashboard for the corresponding lesson timeline and visual graph components.
 
 ---
 
-## Section Modules
+## Section Overview
+
+* **Total Duration:** 29 minutes
+* **Total Lessons:** 4
+* **Primary Focus:** Continuous table append abstractions, trigger optimization mechanics, fault-tolerant state boundaries, and production operational guardrails.
+
+---
+
+## Curriculum Breakdown
 
 ### 76. Structured Streaming - Introduction (6 min)
 
-* **The Programming Model**: Treat a live data stream as a table that is being continuously appended. This allows you to express your streaming computation the same way you would a batch computation.
-* **Key Components**:
-* **Source**: Where data originates (Kafka, Cloud Files/Auto Loader, Delta Tables).
-* **Sink**: Where processed data is written (Delta Lake is the industry standard in 2026).
+* **The Infinite Append Table Model**: Treating a live, incoming data stream as an unbounded table that is continuously being appended. This design paradigm allows you to write your streaming analytics and transformation logic using the exact same code blocks as standard static batch calculations.
+* **Core Stream Components**:
+* **Source**: The stream entry interface where data originates (e.g., Apache Kafka, Cloud Files/Auto Loader, upstream Delta Tables).
+* **Sink**: The storage or connection target where processed records are written (Delta Lake acts as the standard production sink).
 
 
-* **Stateless vs. Stateful**: Understanding when Spark needs to maintain intermediate state (like windowed aggregations) versus simply transforming data line-by-line.
+* **Stateless vs. Stateful Processing**: Differentiating between streaming rows line-by-line without network context (**Stateless**, e.g., `select()`, `filter()`) and maintaining historical multi-row states across time barriers (**Stateful**, e.g., windowed aggregations or tracking session data).
 
 ### 77. Structured Streaming - Demo (16 min)
 
-* **Hands-on Workflow**: A live walkthrough of reading from a streaming source and writing to a Delta table.
-* **2026 Update**: Introduction to **Lakeflow Spark Declarative Pipelines**, which simplify the management of these streams by automating the underlying infrastructure.
-* **Resource Check**: Access the `Resources` dropdown in the course player to download the specific notebooks used for this demonstration.
+* **Hands-on Stream Orchestration**: A live step-by-step walkthrough demonstrating how to read an un-structured messaging stream from a cloud path and write it statefully into a structured Delta table.
+* **Modern Integration Paths**: Implementing **Lakeflow Spark Declarative Pipelines** to wrap these raw streams, letting the platform automatically manage the background infrastructure, state tracking, and checkpoint parameters.
+* **Notebook Resources**: Access the `Resources` dropdown block in the course player to pull the specific PySpark and Spark SQL notebooks applied during this coding demonstration.
 
 ### 78. Trigger & OutputMode (4 min)
 
-* **Trigger Modes (2026 Standards)**:
-* **Unspecified (Default)**: Micro-batches are processed as soon as the previous one finishes.
-* **ProcessingTime**: Runs micro-batches at fixed intervals (e.g., `trigger(processingTime='1 minute')`).
-* **AvailableNow**: Processes all available data as a batch and then stops. **This is the Databricks recommendation for serverless compute in 2026.**
-* **Real-time Mode (Preview)**: A new 2026 feature for sub-second, ultra-low latency (down to 5ms) for operational use cases like fraud detection.
+* **Trigger Engine Standards**: Defining exactly *when* the processing engine checks the streaming source for new available data slices:
+* **Unspecified (Default)**: Micro-batches compile and run back-to-back as fast as the previous micro-batch finish cycle completes.
+* **ProcessingTime**: Restricts execution to fixed periodic intervals (e.g., `.trigger(processingTime='1 minute')`).
+* **AvailableNow**: Ingests all outstanding records as an incremental batch and then shuts down compute immediately. **This is the recommended framework for serverless workloads to minimize idle cluster costs.**
+* **Real-time Mode**: An ultra-low latency execution path optimized for sub-second, operational event loops like live credit card fraud detection.
 
 
-* **Output Modes**:
-* **Append**: Only new rows added to the Result Table are written to the sink (default).
-* **Complete**: The entire Result Table is rewritten to the sink (used for aggregations).
-* **Update**: Only the rows that were updated in the Result Table are written (useful for Delta tables).
+* **Output Configuration Modes**: Defining how internal query table results are physically written out to the targeted destination sink:
+* **Append (Default)**: Only brand-new rows added to the result table since the last micro-batch run are written out.
+* **Complete**: The entire internal result state is recomputed and rewritten from scratch (mandatory for streaming aggregations).
+* **Update**: Only the specific rows that were modified or appended during the latest micro-batch window are written out.
 
 
 
 ### 79. Checkpointing (3 min)
 
-* **The Foundation of Fault Tolerance**: A checkpoint stores the current state and offsets of your stream in cloud storage (DBFS or Unity Catalog Volumes).
-* **Exactly-Once Guarantees**: By using a unique `checkpointLocation` for every stream, Spark can recover from failures and pick up exactly where it left off without duplicating or losing data.
-* **2026 Best Practice**: Always use **Asynchronous State Checkpointing** for stateful queries to minimize micro-batch latency.
+* **The Foundation of Fault Tolerance**: Maintaining resilient stream states by continuously writing processing offsets and transactional logs directly into persistent, secure cloud object storage (via Unity Catalog Volumes).
+* **Exactly-Once Processing Guarantees**: Binding a unique `checkpointLocation` path directory to an active stream ensures that if a cluster node or driver crashes, Spark can read the checkpoint history log to pick up exactly where it left off without duplicating or losing records.
+* **Asynchronous State Checkpointing**: Utilizing background I/O threads to write state files to storage concurrently, preventing state serialization from bottlenecking active micro-batch execution times.
 
 ---
 
-## Performance Checklist for 2026
+## Important Exam Considerations
 
-* **Never Use All-Purpose Compute**: In production, always run Structured Streaming workloads using **Jobs Compute** to save costs and ensure dedicated resources.
-* **Disable Autoscaling**: For standard streaming jobs, autoscaling can cause instability. If you need scaling, migrate to **Lakeflow Pipelines** which feature enhanced, streaming-aware autoscaling.
-* **Watermarking**: Remember that if you are doing stateful aggregations (like "orders per hour"), you must define a **Watermark** to handle late-arriving data and prevent the state from growing infinitely.
+* **Compute Unit Economics**: Never deploy production streaming workloads on interactive All-Purpose clusters. Production tasks must run exclusively on **Job Compute** nodes to leverage lower DBU billing rates and isolate execution footprints.
+* **Autoscaling Configuration Behavior**: Traditional cluster autoscaling causes operational instability for continuous streams due to constant node re-shuffling. If a workload requires elastic scaling, it should be migrated to a **Lakeflow Declarative Pipeline (DLT)**, which features streaming-aware, load-balanced autoscaling.
+* **Watermarking for Stateful Windows**: For stateful streaming aggregations, you must declare a **Watermark** (e.g., `.withWatermark("event_time", "10 minutes")`). The watermark specifies how long the engine should wait for late-arriving or out-of-order data before dropping that time window and clearing old state blocks out of executor memory.
 
 ---
 
-[Next Section: Delta Live Tables & Production Pipelines →](https://www.google.com/search?q=./section12-readme.md)
-
-Are you planning to run these streams continuously for real-time dashboards, or are you looking to use the `AvailableNow` trigger for scheduled incremental processing?
+[← Back to Section 10: Advanced Transformations & Complex Data Structures](https://www.google.com/search?q=./section10-readme.md) | [Next Section: Section 12: Ingestion with Lakeflow Connect →](https://www.google.com/search?q=./section12-readme.md)
