@@ -66,7 +66,7 @@ This section serves as the foundational "engine room" of the course, transitioni
 
 ---
 
-## 💡 Important Exam Considerations
+## Important Exam Considerations
 
 * **Compute Unit Economics (DBU Cost Allocation)**: For the certification exam, remember that **Job Compute is billed at a significantly lower Databricks Unit (DBU) rate than interactive All-Purpose Compute**. Production engineering workloads must always be scheduled as automated tasks on Job Compute clusters to minimize platform operating costs.
 * **Autotermination State Boundaries**: Interactive All-Purpose clusters do not automatically shut down by default unless an explicit idle-time boundary (e.g., 30 minutes) is actively configured during cluster setup.
@@ -74,4 +74,4 @@ This section serves as the foundational "engine room" of the course, transitioni
 
 ---
 
-[← Back to Section 3: Intro to Lakehouse Architecture](https://www.google.com/search?q=./section03-readme.md) | [Next Section: Data Ingestion and Unity Catalog →](https://www.google.com/search?q=./section05-readme.md)
+[← Back to Section 3: Intro to Lakehouse Architecture](https://www.google.com/search?q=./section03-readme.md) | [Next Section: Section 5: Data Ingestion and Unity Catalog →](https://www.google.com/search?q=./section05-readme.md)
