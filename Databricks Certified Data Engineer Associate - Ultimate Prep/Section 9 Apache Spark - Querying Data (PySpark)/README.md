@@ -6,7 +6,7 @@ Refer to **image_66d9bb.png** for the lesson timeline and curriculum sequence.
 
 ---
 
-##  Section Overview
+## Section Overview
 
 * **Total Duration:** 46 minutes
 * **Total Lessons:** 7
@@ -14,7 +14,7 @@ Refer to **image_66d9bb.png** for the lesson timeline and curriculum sequence.
 
 ---
 
-##  Curriculum Breakdown
+## Curriculum Breakdown
 
 ### 60. Introduction to PySpark (3 min)
 
@@ -41,9 +41,6 @@ df_customers = (spark.read
     .json("abfss://raw-zone@storageaccount.dfs.core.windows.net/customers/*.json"))
 
 ```
-
-
-
 ### 62. Extract Orders Data — Complex JSON as Text (5 min)
 
 * **Semi-Structured Optimization**: Parsing highly nested string JSON blobs via direct string indexing can trigger severe shuffle overhead. Utilizing `from_json()` bound to a strict layout schema allows the underlying engine to evaluate nested elements inline, minimizing memory footprints.
@@ -85,11 +82,7 @@ df_refunds = (spark.read
 
 ```
 
-
-
----
-
-##  Important Exam Considerations
+## Important Exam Considerations
 
 * **Narrow vs. Wide Execution Scopes**: Ensure you can classify internal operations smoothly for the exam. Narrow transformations (e.g., `select()`, `filter()`, `withColumn()`) execute completely within an isolated worker partition without requiring network data exchanges. Wide transformations (e.g., `groupBy()`, `join()`, `distinct()`) force data shuffles across worker nodes, drawing a boundary between execution stages.
 * **Broadcast Join Optimization Bounds**: When executing relational joins combining a massive factual transactional DataFrame with a small lookup table ($\le 10\text{MB}$ by default), you can optimize performance by using an explicit broadcast hint: `broadcast(small_df)`. This action pushes a complete copy of the lookup table to every worker node, converting an expensive network shuffle join into a highly efficient local map-side join.
