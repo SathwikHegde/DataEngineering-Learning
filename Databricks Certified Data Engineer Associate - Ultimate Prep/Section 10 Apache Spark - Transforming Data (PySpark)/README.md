@@ -1,11 +1,11 @@
 # Section 10: Apache Spark — Advanced Transformations & Complex Data Structures
 This section of the course expands your programming capabilities by tackling advanced relational manipulation and complex, semi-structured schemas inside the **PySpark DataFrame API**. You will master array flattening, dictionary/map handling, string structural manipulation, and advanced conditional logic required to transform raw Bronze-tier data inputs into highly refined, consumption-ready Silver and Gold tables.
 Refer to your course dashboard for the matching lesson sequence and video assets.
-## 🏛️ Section Overview
+## Section Overview
  * **Total Duration:** 58 minutes
  * **Total Lessons:** 7
  * **Primary Focus:** High-performance built-in functions, structural string manipulations, array un-nesting, subquery logic routing, and conditional evaluation blocks.
-## 📅 Curriculum Breakdown
+## Curriculum Breakdown
 ### 67. High-Performance Built-in Functions & Expression Evaluations (11 min)
  * **Avoiding User-Defined Functions (UDFs)**: Standard Python UDFs act as severe execution bottlenecks because they force the underlying JVM engine to serialize data back and forth to an isolated Python process.
  * **The Native Standard**: Production pipelines enforce the exclusive use of native functions imported from pyspark.sql.functions (like col, expr, and lit). These run directly within the highly optimized Tungsten execution container.
@@ -46,7 +46,7 @@ Refer to your course dashboard for the matching lesson sequence and video assets
  * **Left-Semi Joins**: Filtering rows from the left side of a dataset where a matching record is located on the right side, without bringing any columns from the right dataset into memory.
  * **Left-Anti Joins**: Isolating data anomalies by *only* keeping records from the left dataset that have **zero matching pairs** inside the right tracking table.
  * **Handling Column Name Ambiguity**: Resolving the common "Ambiguous Column reference" error during self-joins or multi-table connections by assigning explicit table aliases or renaming overlapping key columns before execution.
-## 💡 Important Exam Considerations
+## Important Exam Considerations
  * **UDF Performance Penalties**: Be ready for a scenario question tracking compute bottlenecks. Selecting options that implement standard Python functions inside an explicit udf() wrapper is almost always an incorrect distractor. Look for choices that resolve the requirement using native functions from pyspark.sql.functions.
  * **The Anti-Join Paradigm**: For data auditing and quality tracking scenarios on the exam, remember that a **Left-Anti Join** is the most performant way to isolate missing records or orphans (e.g., identifying transaction records that do not contain a corresponding customer entry profile).
  * **Explode Row Multiplication Side-Effects**: Remember that calling explode() on a column completely drops rows where the target array is empty or contains a null value. To preserve those parent records in your output dataset, you must use the alternative function: **explode_outer()**.
