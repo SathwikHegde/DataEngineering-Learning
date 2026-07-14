@@ -2,7 +2,7 @@
 
 This section focuses on bridging the gap between local development workflows and cloud-scale execution using **Databricks Connect**. You will learn how to configure your local Integrated Development Environment (IDE) to write, debug, and test code locally while offloading heavy data processing workloads onto a remote Databricks compute cluster.
 
-Refer to **image_77a09a.png** for the lesson timeline and curriculum sequence.
+Refer to `image_77a09a.png` for the lesson timeline and curriculum sequence.
 
 ---
 
@@ -35,8 +35,6 @@ Refer to **image_77a09a.png** for the lesson timeline and curriculum sequence.
 pip install databricks-connect==15.4.*
 
 ```
-
-
 * **Workspace Authentication**: Establishing secure network authorization to the cloud workspace using OAuth machine-to-machine tokens or Personal Access Tokens (PATs) managed securely via local configuration profiles or environment variables.
 * **Execution Verification**: Instantiating a remote Spark session from a local script to pull sample data blocks down to the local development terminal for verification:
 ```python
