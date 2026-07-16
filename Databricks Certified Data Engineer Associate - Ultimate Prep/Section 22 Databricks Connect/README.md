@@ -48,6 +48,7 @@ df = spark.read.table("production.silver.telecom_events").limit(5)
 df.show()
 
 ```
+
 ## Important Exam Considerations
 
 * **Division of Labor (Where Code Runs)**: For the certification exam, memorize this exact separation of concerns: **Your main Python program loop, local IDE breakpoints, non-Spark functions, and unit test frameworks execute entirely on your local machine.** However, **all Spark DataFrame transformations, SQL logical optimization, physical data scanning, and cluster shuffles execute directly on the remote Databricks cluster worker nodes.**
