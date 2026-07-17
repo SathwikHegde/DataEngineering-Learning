@@ -2,7 +2,7 @@
 
 This section focuses on data extraction, storage decoupling, and programmatic API interactions using the **PySpark DataFrame API**. In modern distributed environments, PySpark serves as the primary interface for production data engineering, delivering execution performance identical to Scala due to the optimizations of the **Catalyst Optimizer** and the **Tungsten** execution engine.
 
-Refer to **image_66d9bb.png** for the lesson timeline and curriculum sequence.
+Refer to `image_66d9bb.png` for the lesson timeline and curriculum sequence.
 
 ---
 
@@ -20,6 +20,7 @@ Refer to **image_66d9bb.png** for the lesson timeline and curriculum sequence.
 
 * **The Remote Connectivity Standard**: Modern environments lean heavily on the **Spark Connect** client-server protocol. This architecture decouples the client application layer from the Spark driver, executing commands as lightweight gRPC requests from a thin client environment without requiring local Java Virtual Machine (JVM) installations.
 * **Lazy Evaluation Architecture**: Differentiating between structural **Transformations** (which append execution instructions to a logical DAG plan without pulling data into memory) and **Actions** (which compile, optimize, and compute the logical plan to return physical results or persist output to storage).
+
 * **DataFrame API Paradigm**: Resilient Distributed Datasets (RDDs) serve as a legacy storage and execution abstraction layer. Production pipelines enforce the use of strict **DataFrames** to let the engine apply cross-language optimizations via the Catalyst execution planner.
 
 ### 61. Extract Customers Data — Simple JSON (17 min)
@@ -39,8 +40,6 @@ customer_schema = StructType([
 df_customers = (spark.read
     .schema(customer_schema)
     .json("abfss://raw-zone@storageaccount.dfs.core.windows.net/customers/*.json"))
-
-```
 ### 62. Extract Orders Data — Complex JSON as Text (5 min)
 
 * **Semi-Structured Optimization**: Parsing highly nested string JSON blobs via direct string indexing can trigger severe shuffle overhead. Utilizing `from_json()` bound to a strict layout schema allows the underlying engine to evaluate nested elements inline, minimizing memory footprints.
