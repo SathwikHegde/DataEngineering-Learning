@@ -1,8 +1,8 @@
 # Section 26: Course Graduation & Next Steps
 
-Congratulations on completing the **Databricks Certified Data Engineer Associate - Ultimate Prep** course! This final section serves as your official launchpad, providing the critical final logistics, calibration targets, and strategic scaling vectors needed to leverage your upcoming credential for long-term career acceleration.
+Congratulations on completing the **Databricks Certified Data Engineer Associate — Ultimate Prep** course! This final section serves as your official launchpad, providing the critical final logistics, calibration targets, and strategic scaling vectors needed to leverage your upcoming credential for long-term career acceleration.
 
-Refer to **image_6bdbc3.png** for the final lesson breakdown inside this graduation module.
+Refer to `image_6bdbc3.png` for the final lesson breakdown inside this graduation module.
 
 ---
 
