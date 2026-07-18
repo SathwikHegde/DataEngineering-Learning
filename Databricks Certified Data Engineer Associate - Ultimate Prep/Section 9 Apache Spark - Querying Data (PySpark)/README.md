@@ -40,6 +40,8 @@ customer_schema = StructType([
 df_customers = (spark.read
     .schema(customer_schema)
     .json("abfss://raw-zone@storageaccount.dfs.core.windows.net/customers/*.json"))
+
+```
 ### 62. Extract Orders Data — Complex JSON as Text (5 min)
 
 * **Semi-Structured Optimization**: Parsing highly nested string JSON blobs via direct string indexing can trigger severe shuffle overhead. Utilizing `from_json()` bound to a strict layout schema allows the underlying engine to evaluate nested elements inline, minimizing memory footprints.
@@ -80,7 +82,6 @@ df_refunds = (spark.read
     .load())
 
 ```
-
 ## Important Exam Considerations
 
 * **Narrow vs. Wide Execution Scopes**: Ensure you can classify internal operations smoothly for the exam. Narrow transformations (e.g., `select()`, `filter()`, `withColumn()`) execute completely within an isolated worker partition without requiring network data exchanges. Wide transformations (e.g., `groupBy()`, `join()`, `distinct()`) force data shuffles across worker nodes, drawing a boundary between execution stages.
