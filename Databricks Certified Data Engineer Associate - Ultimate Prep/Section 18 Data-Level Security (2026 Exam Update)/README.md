@@ -1,8 +1,8 @@
-# Section 18: Data-Level Security (2026 Exam Update)
+# Section 18: Data-Level Security
 
-This section targets fine-grained access control mechanisms within Databricks, aligning with the updated **2026 Associate Certification** guidelines. You will master the technical tools required to isolate, mask, and filter data assets dynamically across complex corporate operational topologies, ensuring strict adherence to global privacy laws (such as GDPR, CCPA, and HIPAA) right at the storage tier.
+This section targets fine-grained access control mechanisms within Databricks, aligning with the **Data Engineer Associate** guidelines. You will master the technical tools required to isolate, mask, and filter data assets dynamically across complex corporate operational topologies, ensuring strict adherence to global privacy laws (such as GDPR, CCPA, and HIPAA) right at the storage tier.
 
-Refer to **image_5e6b09.png** for the chronological lesson sequence covered in this security module.
+Refer to `image_5e6b09.png` for the chronological lesson sequence covered in this security module.
 
 ---
 
@@ -24,6 +24,7 @@ Refer to **image_5e6b09.png** for the chronological lesson sequence covered in t
 ### 128. Data-Level Security Using Dynamic Views (14 min)
 
 * **Dynamic Scoping**: Using functional, built-in context functions inside classic SQL view structures to evaluate user permissions during query execution.
+
 * **Core Security Functions**:
 * `is_account_group_member()`: Validates if the current user belongs to an identity group synchronized at the account tier.
 * `current_user()`: Pulls the explicit email address string of the person executing the query cell.
@@ -62,7 +63,6 @@ ALTER TABLE production.silver.customer_profiles
 ALTER COLUMN social_security_number SET MASK governance.policies.mask_ssn;
 
 ```
-
 ### 130. Data-Level Security Using ABAC Policies and Governed Tags (21 min)
 
 * **Attribute-Based Access Control (ABAC)**: Transitioning from rigid Role-Based policies (RBAC) to highly flexible, scalable identity-and-attribute tagging logic.
@@ -70,8 +70,7 @@ ALTER COLUMN social_security_number SET MASK governance.policies.mask_ssn;
 * **Tag-Based Policies**: Writing generalized security routines that automatically look for these tags. For example, you can write a single rule stating: *"If a column is tagged as `Classification = PII`, automatically mask the column for any user who is not a member of the Compliance group."* This removes the need to manually write hundreds of individual column masking functions across your enterprise.
 
 ---
-
-## Important Exam Considerations
+##  Important Exam Considerations
 
 * **Performance and Pushdowns**: Row filters and column masks are evaluated on serverless or interactive compute clusters at query compile time. They leverage the **Catalyst Optimizer** to push down filters directly into the cloud storage layer, ensuring security rules don't cause significant query bottlenecks.
 * **Owner Overrides**: Be aware that the explicit **Owner** of a table (the principal identity or group that created it) is typically immune to localized row filters and column masks unless explicitly specified within the policy logic.
@@ -79,4 +78,4 @@ ALTER COLUMN social_security_number SET MASK governance.policies.mask_ssn;
 
 ---
 
-[← Back to Section 17: Data Governance with Unity Catalog](https://www.google.com/search?q=./section17-readme.md) | [Next Section: Section 19: Advanced Sharing & Lakehouse Federation →](https://www.google.com/search?q=./section19-readme.md)
+[← Back to Section 17: Data Governance with Unity Catalog](https://www.google.com/search?q=./section17-readme.md) | [Next Section: Section 19: Delta Sharing & Lakehouse Federation →](https://www.google.com/search?q=./section19-readme.md)
