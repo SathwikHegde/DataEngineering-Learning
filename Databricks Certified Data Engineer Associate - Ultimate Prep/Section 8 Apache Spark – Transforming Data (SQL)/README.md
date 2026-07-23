@@ -6,7 +6,7 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 ---
 
-##  Section Overview
+## Section Overview
 
 * **Total Duration:** 2 Hours 8 Minutes
 * **Total Lessons:** 14
@@ -14,7 +14,7 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 ---
 
-##  Curriculum Breakdown
+## Curriculum Breakdown
 
 ### 46. Data Profiling in Databricks (11 min)
 
@@ -57,7 +57,7 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 ---
 
-## 🛠️ Key Technical Skills
+## Key Technical Skills
 
 | Feature | Operational Functionality |
 | --- | --- |
@@ -68,7 +68,7 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 ---
 
-##  Important Exam Considerations
+## Important Exam Considerations
 
 * **The Side-Effects of Array Multiplication**: For the certification exam, remember that using `explode()` completely drops rows where the target array is empty or evaluates to `null`. To retain those parent records in your output dataset, you must use the alternative function: **`explode_outer()`**.
 * **UDF Performance Penalties**: Review scenario-driven debugging questions carefully. Replacing manual Python or Scala UDF logic loops with **Native Spark SQL Functions** or built-in expression calls lets the Catalyst planner optimize execution directly within high-speed Tungsten memory blocks.
@@ -76,4 +76,4 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 ---
 
-[← Back to Section 7: Apache Spark - Querying Data (SQL)](https://www.google.com/search?q=./section07-readme.md) | [Next Section: Section 9: Apache Spark - Querying Data (PySpark) →](https://www.google.com/search?q=./section09-readme.md)
+[← Back to Section 7: Apache Spark — Querying Data (SQL)](https://www.google.com/search?q=./section07-readme.md) | [Next Section: Section 9: Apache Spark — Querying Data (PySpark) →](https://www.google.com/search?q=./section09-readme.md)
