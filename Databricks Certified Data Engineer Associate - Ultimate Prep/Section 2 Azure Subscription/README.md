@@ -1,48 +1,46 @@
-# Section 2: Azure Subscription & Cloud Environment Staging
+# Section 2: Azure Subscription Setup & Environment Preparation
 
-This section focuses on setting up your foundational cloud infrastructure. Because Databricks operates inside your designated cloud ecosystem, establishing a properly configured Azure subscription is the first structural milestone toward deploying interactive workspaces, data lakes, and secure storage contexts.
+This section guides you through building your core cloud infrastructure. Because Azure Databricks runs directly within your managed cloud tenant, configuring a fresh Azure subscription is the essential first step before deploying compute workspaces, data lakes, and secure storage layers.
 
-Refer to your course player for the associated lesson timelines and video assets.
+*Review your course dashboard to access the video lectures and time-coded walkthroughs for this section.*
 
 ---
 
-## Section Overview
+## At a Glance
 
 * **Total Duration:** 10 minutes
-* **Total Lessons:** 2
-* **Primary Focus:** Azure account instantiation, cloud credit resource allocation, portal navigation, and identity access scoping.
+* **Number of Lessons:** 2
+* **Core Topics:** Azure account creation, cloud credit management, portal interface navigation, and resource organization.
 
 ---
 
-## Curriculum Breakdown
+## Lesson Outline
 
-### 7. Creating Azure Free Account (6 min)
+### 1. Registering an Azure Free Account (6 min)
 
-* **The Cloud Ingestion Pad**: Walking through the structural enrollment process to claim a clean learning environment. The account configuration framework provides an isolated tier containing:
-* **$200 Evaluation Credit**: A flexible financial allowance available for usage across any resource footprint within the first 30 days of subscription life.
-* **12 Months of Structured Services**: Complimentary monthly capacities for specific operational assets, including specialized relational engines and multi-purpose Virtual Machine instances.
-* **Always-Free Tier Access**: Perpetual baseline quotas across several core serverless components, data stores, and event routers that remain active past your initial validation timeline.
-
-
-
-### 8. Azure Portal Overview (4 min)
-
-* **The Administrative Interface Canvas**: A functional architectural tour mapping the updated portal command panel. Key layout patterns focus on managing your enterprise data engineering infrastructure:
-* **Logical Resource Groups**: Constructing standard, isolated permission boundaries (`rg-databricks-prep-01`) to encapsulate all your subsequent Databricks and cloud lake storage assets.
-* **Global Directory Navigation**: Rapid querying methods to isolate specialized platform registries, notably **Azure Databricks Workspaces** and **Storage Accounts (ADLS Gen2)**.
-* **The Cloud Marketplace Engine**: Provisioning first-party managed platform infrastructure blocks seamlessly through verified template blueprints.
-* **Cost Management Controls**: Building proactive spending alerts and tracking metrics over your initial cloud credit balance to guarantee zero runaway billing over unexpected processing drops.
+* **Setting Up Your Sandbox**: A step-by-step walkthrough for creating a dedicated, safe learning environment. Your new account includes:
+* **$200 Trial Credit**: A $200 credit valid for 30 days to test and deploy any Azure resources.
+* **12 Months of Select Free Services**: Complimentary monthly allowances for key operational tools, including virtual machines and relational databases.
+* **Always-Free Tier**: Permanent access to foundational serverless functions, lightweight databases, and messaging hubs—even after your initial credits expire.
 
 
+
+### 2. Navigating the Azure Portal (4 min)
+
+* **Exploring the Management Dashboard**: A guided tour of the Azure Portal, focused on the tools you'll use as a data engineer:
+* **Resource Groups**: Learn to create logical boundaries (such as `rg-databricks-prep-01`) to isolate and manage permissions for all your Databricks and data lake assets.
+* **Global Search & Discovery**: Quickly locate essential resources, specifically **Azure Databricks Workspaces** and **Azure Data Lake Storage Gen2 (ADLS Gen2)** accounts.
+* **Azure Marketplace**: Provision official managed services and pre-configured software templates directly into your environment.
+* **Cost Management & Budgets**: Set up automated spending alerts to monitor your remaining free credits and prevent unexpected charges.
 
 ---
 
-## Pro-Tips for Data Engineers
+## Key Takeaways for Data Engineers
 
-1. **Identity Verification Scope**: Have a valid credit card ready for programmatic billing identity verification during account onboarding. The initialization framework keeps accounts locked inside an explicit credit protection block, meaning billing charges will not trigger unless you manually execute an authorization upgrade to a **Pay-As-You-Go** profile after your credit window expires.
-2. **Geographic Latency Calculations**: When launching your Resource Groups and storage environments, choose a target cloud region geographically closest to your physical location. Localizing compute clusters minimizes network round-trip overhead and avoids localized machine capacity bounds.
-3. **Strict Resource Isolation**: Group your training instances within dedicated, short-lived resource containers. This approach lets you clean up assets easily after completing labs, saving you from hunting down stray data lakes or running compute clusters.
+1. **Credit Card Verification**: You must provide a credit card during signup solely to confirm your identity. Azure places a protective spending limit on free accounts, so you won't be charged unless you explicitly choose to upgrade to a **Pay-As-You-Go** subscription.
+2. **Selecting the Right Region**: When creating Resource Groups and storage, pick an Azure region geographically near you. This reduces network latency and ensures reliable access to compute capacity.
+3. **Organized Cleanup**: Keep all lab resources inside dedicated, isolated Resource Groups. This makes teardown quick and simple when you complete a project, preventing idle clusters or stray storage accounts from draining your credits.
 
 ---
 
-[← Back to Section 1: Course Introduction & Overview](https://www.google.com/search?q=./section01-readme.md) | [Next Section: Section 3: Introduction to the Lakehouse Architecture →](https://www.google.com/search?q=./section03-readme.md)
+[← Previous: Section 1 - Course Overview](https://www.google.com/search?q=./section01-readme.md) | [Next: Section 3 - Introduction to Lakehouse Architecture →](https://www.google.com/search?q=./section03-readme.md)
