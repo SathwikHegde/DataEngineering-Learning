@@ -1,6 +1,6 @@
 # Section 11: Spark Structured Streaming
 
-This section introduces **Spark Structured Streaming**, the scalable, fault-tolerant stream processing engine built natively on the Spark SQL optimization core. In 2026, production focus has fully shifted toward high-performance, low-latency "Lakeflow" streaming patterns and advanced asynchronous recovery mechanisms. Mastering these operational modules is essential for executing real-time data ingestion and event processing inside an enterprise Lakehouse environment.
+This section introduces **Spark Structured Streaming**, the scalable, fault-tolerant stream processing engine built natively on the Spark SQL optimization core. Production focus centers on high-performance, low-latency "Lakeflow" streaming patterns and advanced asynchronous recovery mechanisms. Mastering these operational modules is essential for executing real-time data ingestion and event processing inside an enterprise Lakehouse environment.
 
 Refer to your course player dashboard for the corresponding lesson timeline and visual graph components.
 
