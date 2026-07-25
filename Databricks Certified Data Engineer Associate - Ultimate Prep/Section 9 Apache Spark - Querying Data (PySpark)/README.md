@@ -6,7 +6,7 @@ Refer to `image_66d9bb.png` for the lesson timeline and curriculum sequence.
 
 ---
 
-## Section Overview
+## ection Overview
 
 * **Total Duration:** 46 minutes
 * **Total Lessons:** 7
@@ -60,8 +60,6 @@ df_customers = (spark.read
 * `DROPMALFORMED`: Silently ignores and filters out rows containing invalid elements during the initial read.
 * `FAILFAST`: Immediately crashes execution and outputs a driver stack trace the moment a single structural schema anomaly is encountered.
 
-
-
 ### 66. Extract Refunds Data — SQL Table via JDBC (4 min)
 
 * **Secure Metadata Ingestion**: Always encapsulate database connection properties inside isolated **Databricks Secrets** vaults, calling `dbutils.secrets.get()` to resolve credentials securely at runtime rather than exposing plain text keys inside repo configurations.
@@ -82,6 +80,7 @@ df_refunds = (spark.read
     .load())
 
 ```
+
 ## Important Exam Considerations
 
 * **Narrow vs. Wide Execution Scopes**: Ensure you can classify internal operations smoothly for the exam. Narrow transformations (e.g., `select()`, `filter()`, `withColumn()`) execute completely within an isolated worker partition without requiring network data exchanges. Wide transformations (e.g., `groupBy()`, `join()`, `distinct()`) force data shuffles across worker nodes, drawing a boundary between execution stages.
