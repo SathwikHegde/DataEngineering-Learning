@@ -1,6 +1,6 @@
-# Section 25: Certification Exam Guide & Practice Exam (2026 Exam Update)
+# Section 25: Certification Exam Guide & Practice Exam
 
-This final section completes your journey through the **Databricks Certified Data Engineer Associate** preparation course. Designed as a high-yield strategic checkpoint, this module shifts away from technical code implementation to focus on testing psychology, point optimization, blueprint weight analysis, and a full-length, exam-mode simulator aligned with the latest **May 2026** updates.
+This final section completes your journey through the **Databricks Certified Data Engineer Associate** preparation course. Designed as a high-yield strategic checkpoint, this module shifts away from technical code implementation to focus on testing psychology, point optimization, blueprint weight analysis, and a full-length, exam-mode simulator.
 
 ---
 
@@ -28,7 +28,7 @@ This final section completes your journey through the **Databricks Certified Dat
 * **Delivery Modes**: Onsite at a physical Kryterion/Pearson VUE testing center or via an online proctored web-lockdown environment.
 
 
-* **Core Blueprint Weight Distribution for 2026**:
+* **Core Blueprint Weight Distribution**:
 1. **Databricks Tooling & Platform Architecture (~24%)**: Compute sizing metrics, language-mixing Magic Commands, cluster permission scopes, and integrated Git Folders.
 2. **Data Ingestion & Extraction (~28%)**: Incremental streaming with Auto Loader, SQL/PySpark batch readers, and managed serverless **Lakeflow Connect** pipelines.
 3. **Data Processing & Transformation (~22%)**: Delta transaction logging, ACID properties, time travel parameters, narrow vs. wide transformations, and **Liquid Clustering (`CLUSTER BY`)** layout rules.
@@ -37,9 +37,9 @@ This final section completes your journey through the **Databricks Certified Dat
 
 
 
-### Practice Test 1: Databricks Certified Data Engineer Associate [May 2026 Version]
+### Practice Test 1: Databricks Certified Data Engineer Associate
 
-* **The Final Simulation**: A 45-question mock test matching the exact distribution, phrasing patterns, and domain weightings of the real exam. This simulation includes comprehensive testing on 2026 platform paradigms:
+* **The Final Simulation**: A 45-question mock test matching the exact distribution, phrasing patterns, and domain weightings of the real exam. This simulation includes comprehensive testing on platform paradigms:
 * Migrating from legacy Z-Ordering to **Liquid Clustering**.
 * Managing continuous synchronization workflows via **Lakeflow Connect**.
 * Provisioning resource topologies through **DABs YAML declarations**.
@@ -57,7 +57,7 @@ Do not allow a single complex query-parsing cell or an intricate tracking scenar
 
 ### 2. Disqualify Legacy Distractors Automatically
 
-Databricks exams frequently test architectural modernization boundaries. If a question addresses high-performance 2026 infrastructure, multi-workspace collaboration, or dynamic performance layout, immediately filter out answers citing legacy tech stacks:
+Databricks exams frequently test architectural modernization boundaries. If a question addresses high-performance infrastructure, multi-workspace collaboration, or dynamic performance layout, immediately filter out answers citing legacy tech stacks:
 
 * Reject **Hive Metastore** in favor of **Unity Catalog**.
 * Reject **Hive-style Physical Folder Partitioning** or manual **Z-Ordering** in favor of dynamic **Liquid Clustering (`CLUSTER BY`)**.
