@@ -1,8 +1,8 @@
-# Section 15: Lakeflow Spark Declarative Pipelines (SDP) - Project
+# Section 15: Lakeflow Spark Declarative Pipelines (SDP) — Project
 
 This section delivers a comprehensive, hands-on architectural project using **Lakeflow Spark Declarative Pipelines (SDP)** (traditionally known as Delta Live Tables). Over the course of 2 hours and 40 minutes, you will build an end-to-end production application following the Medallion architecture—moving seamlessly from raw data ingestion to consumption-ready analytical layers while integrating advanced data validation, governance, and Slowly Changing Dimensions (SCD).
 
-Refer to **image_08e047.png** for the complete sequence of project tasks.
+Refer to `image_08e047.png` for the complete sequence of project tasks.
 
 ---
 
