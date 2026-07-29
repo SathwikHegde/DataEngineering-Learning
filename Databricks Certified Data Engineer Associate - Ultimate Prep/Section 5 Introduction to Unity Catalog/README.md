@@ -7,53 +7,51 @@ This section serves as the definitive guide to **Unity Catalog (UC)**, the unifi
 ## Section Overview
 
 * **Total Duration:** 50 minutes
-* **Lessons:** 6
+* **Total Lessons:** 6
 * **Primary Focus:** Transitioning from the legacy Hive Metastore to the 3-tier namespace and securing cloud storage.
 
 ---
 
-## Section Modules
+## Curriculum Breakdown
 
 | Lesson # | Title | Duration | Key Learning Outcome |
 | --- | --- | --- | --- |
-| 25 | **Introduction to Unity Catalog** | 6 min | Overview of unified governance for data and AI. |
-| 26 | **UC / Hive Metastore Object Model** | 6 min | Understanding the transition from 2-tier to 3-tier naming. |
-| 27 | **Create Unity Catalog Metastore** | 14 min | Step-by-step walkthrough of creating the regional metastore. |
-| 28 | **Cluster Configurations for UC** | 4 min | Configuring "Shared" or "Single User" access modes. |
-| 29 | **Configure Access to Cloud Storage** | 5 min | Lecture on Storage Credentials and External Locations. |
-| 30 | **Configure Access to Cloud Storage** | 14 min | Demo of connecting Databricks to Azure Data Lake Storage. |
+| **25** | **Introduction to Unity Catalog** | 6 min | Overview of unified governance for data and AI. |
+| **26** | **UC / Hive Metastore Object Model** | 6 min | Understanding the transition from 2-tier to 3-tier naming. |
+| **27** | **Create Unity Catalog Metastore** | 14 min | Step-by-step walkthrough of creating the regional metastore. |
+| **28** | **Cluster Configurations for UC** | 4 min | Configuring "Shared" or "Single User" access modes. |
+| **29** | **Configure Access to Cloud Storage (Lecture)** | 5 min | Overview of Storage Credentials and External Locations. |
+| **30** | **Configure Access to Cloud Storage (Demo)** | 14 min | Demo of connecting Databricks to Azure Data Lake Storage. |
 
 ---
 
 ## Core Architectural Shifts
 
-### **The 3-Tier Namespace**
+### 1. The 3-Tier Namespace
 
-In this section, you will learn how Unity Catalog organizes data assets using a **three-tier hierarchy**:
+Unity Catalog organizes data assets using a **three-tier hierarchy**:
 
 1. **Catalog:** The highest level of the container (e.g., `production`).
 2. **Schema (Database):** A logical grouping within a catalog.
-3. **Table / View / Volume:** The actual data object.
+3. **Table / View / Volume:** The actual data object (e.g., `production.silver.customers`).
 
-### **Unified Governance**
+### 2. Unified Governance
 
-Unlike the legacy **Hive Metastore**, which is often siloed within a single workspace, a **Unity Catalog Metastore** is a top-level container that can be assigned to multiple workspaces in the same region. This allows for centralized auditing, lineage tracking, and permission management.
+Unlike the legacy **Hive Metastore**, which is often siloed within a single workspace, a **Unity Catalog Metastore** is a top-level container that can be assigned to multiple workspaces in the same region. This allows for centralized auditing, lineage tracking, and permission management across the entire enterprise.
 
-### **Securing the "Plumbing"**
+### 3. Securing Cloud Infrastructure
 
-Lessons 29 and 30 focus on the secure abstraction of your underlying cloud infrastructure:
-
-* **Storage Credentials:** Securely store the identity (Managed Identity or Service Principal) used to talk to Azure Storage.
-* **External Locations:** Define specific cloud storage paths that Unity Catalog governs, removing the need for users to manage individual storage keys or SAS tokens.
+* **Storage Credentials:** Securely encapsulate identity management (Service Principal or Managed Identity) used to authenticate with cloud storage buckets.
+* **External Locations:** Define specific cloud storage paths governed by Unity Catalog, eliminating the need for users to manage raw storage keys or SAS tokens directly.
 
 ---
 
-## Key Takeaways for the Exam
+## Important Exam Considerations
 
-* **One Metastore per Region:** You generally only create one Unity Catalog metastore per region within your account.
-* **Compute Compatibility:** To access UC-governed tables, you must use a cluster configured with **Unity Catalog-compatible access modes** (Shared or Single User).
-* **Governance Hierarchy:** Permissions (GRANT/REVOKE) are inherited from the Catalog down to the individual Table.
+* **One Metastore per Region**: A single Unity Catalog metastore is typically deployed per cloud region per account and mapped across multiple workspaces.
+* **Compute Access Modes**: To query UC-governed assets, compute clusters must be configured with supported UC access modes (**Shared** or **Single User**). Legacy "No Isolation" modes cannot access UC tables.
+* **Governance Inheritance**: Permissions granted via `GRANT` / `REVOKE` cascade downwards through the object hierarchy from Catalog down to Schema and individual Tables/Views.
 
 ---
 
-[Next Section: Data Objects in the Lakehouse →](https://www.google.com/search?q=./section6-readme.md)
+[← Back to Section 4: Databricks Workspace Architecture & Developer Tools](https://www.google.com/search?q=./section04-readme.md) | [Next Section: Section 6: Data Objects in the Lakehouse →](https://www.google.com/search?q=./section06-readme.md)
