@@ -2,7 +2,7 @@
 
 This section shifts focus toward the serving, presentation, and consumption layers of the Lakehouse architecture using **Databricks SQL (DB SQL)**. Over the course of 34 minutes, you will explore how to configure optimized analytical compute instances and build native business intelligence components directly on top of your Delta tables—completely eliminating the need to export data to external, legacy data warehousing systems.
 
-Refer to **image_5de8a2.png** for the lesson sequence covered in this operational module.
+Refer to `image_5de8a2.png` for the lesson sequence covered in this operational module.
 
 ---
 
@@ -30,12 +30,14 @@ Refer to **image_5de8a2.png** for the lesson sequence covered in this operationa
 * **Scaling Factor**: Specifying minimum and maximum cluster boundaries to enable automatic horizontal replication under high concurrent user loads.
 * **Auto-Stop**: Setting strict idle timeouts (typically 5–10 minutes) to terminate inactive endpoints immediately, preventing unnecessary DBU consumption.
 
-### 153. Databricks SQL - Query & Visualization (8 min)
+
+
+### 153. Databricks SQL — Query & Visualization (8 min)
 
 * **The SQL Editor Interface**: Leveraging production-grade editor tools featuring live schema auto-completion, execution snippets, multi-tab layout configurations, and centralized query history logs.
 * **Integrated Visualization Engine**: Converting tabular result sets into interactive business visuals—including time-series line graphs, cohort tracking funnels, geo-spatial maps, and categorical bar charts—directly within the Databricks workspace layer.
 
-### 154. Databricks - SQL Alerts (8 min)
+### 154. Databricks — SQL Alerts (8 min)
 
 * **Proactive Threshold Tracking**: Constructing automated background assertions on top of saved queries (e.g., *"Trigger an alert condition when `error_count` crosses a threshold of 50 within a rolling 1-hour window"*).
 * **Enterprise Notification Routing**: Binding alert evaluations to instant delivery endpoints—including corporate email servers, Slack webhooks, Microsoft Teams channels, or generic PagerDuty integrations—to ensure high-priority production data shifts are surfaced immediately.
@@ -53,6 +55,9 @@ Refer to **image_5de8a2.png** for the lesson sequence covered in this operationa
 * **Dashboard Security Contexts (`Run As` Permissions)**:
 * **Run as Owner**: The visualization queries run using the security profile of the dashboard creator. This allows downstream consumers to view aggregated charts even if they lack direct read permissions to the underlying physical tables.
 * **Run as Viewer**: The dashboard queries execute dynamically under the security profile of the person opening the asset, strictly enforcing individual data-level security boundaries.
+
+
+
 ---
 
 [← Back to Section 23: Databricks Automation Bundles (DABs)](https://www.google.com/search?q=./section23-readme.md) | [Next Section: Section 25: Certification Exam Guide & Practice Exam →](https://www.google.com/search?q=./section25-readme.md)
