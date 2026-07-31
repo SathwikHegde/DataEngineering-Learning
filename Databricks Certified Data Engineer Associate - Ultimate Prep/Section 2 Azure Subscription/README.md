@@ -6,15 +6,15 @@ This section guides you through building your core cloud infrastructure. Because
 
 ---
 
-## At a Glance
+## Section Overview
 
 * **Total Duration:** 10 minutes
-* **Number of Lessons:** 2
-* **Core Topics:** Azure account creation, cloud credit management, portal interface navigation, and resource organization.
+* **Total Lessons:** 2
+* **Primary Focus:** Azure account creation, cloud credit management, portal interface navigation, and resource organization.
 
 ---
 
-## Lesson Outline
+## Curriculum Breakdown
 
 ### 1. Registering an Azure Free Account (6 min)
 
@@ -33,14 +33,16 @@ This section guides you through building your core cloud infrastructure. Because
 * **Azure Marketplace**: Provision official managed services and pre-configured software templates directly into your environment.
 * **Cost Management & Budgets**: Set up automated spending alerts to monitor your remaining free credits and prevent unexpected charges.
 
+
+
 ---
 
 ## Key Takeaways for Data Engineers
 
-1. **Credit Card Verification**: You must provide a credit card during signup solely to confirm your identity. Azure places a protective spending limit on free accounts, so you won't be charged unless you explicitly choose to upgrade to a **Pay-As-You-Go** subscription.
-2. **Selecting the Right Region**: When creating Resource Groups and storage, pick an Azure region geographically near you. This reduces network latency and ensures reliable access to compute capacity.
-3. **Organized Cleanup**: Keep all lab resources inside dedicated, isolated Resource Groups. This makes teardown quick and simple when you complete a project, preventing idle clusters or stray storage accounts from draining your credits.
+* **Credit Card Verification**: You must provide a credit card during signup solely to confirm your identity. Azure places a protective spending limit on free accounts, so you won't be charged unless you explicitly choose to upgrade to a **Pay-As-You-Go** subscription.
+* **Selecting the Right Region**: When creating Resource Groups and storage, pick an Azure region geographically near you. This reduces network latency and ensures reliable access to compute capacity.
+* **Organized Cleanup**: Keep all lab resources inside dedicated, isolated Resource Groups. This makes teardown quick and simple when you complete a project, preventing idle clusters or stray storage accounts from draining your credits.
 
 ---
 
-[← Previous: Section 1 - Course Overview](https://www.google.com/search?q=./section01-readme.md) | [Next: Section 3 - Introduction to Lakehouse Architecture →](https://www.google.com/search?q=./section03-readme.md)
+[← Back to Section 1: Course Overview](https://www.google.com/search?q=./section01-readme.md) | [Next Section: Section 3: Introduction to Lakehouse Architecture →](https://www.google.com/search?q=./section03-readme.md)
