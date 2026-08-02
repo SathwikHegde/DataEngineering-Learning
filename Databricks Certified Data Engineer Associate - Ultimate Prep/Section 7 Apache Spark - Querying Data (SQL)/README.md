@@ -1,8 +1,8 @@
-# Section 7: Apache Spark - Querying Data (SQL)
+# Section 7: Apache Spark — Querying Data (SQL)
 
 This section focuses on the **Extract** and **Transform** phases of the data engineering lifecycle using **Spark SQL**. You will master the techniques required to interact with diverse file formats (JSON, TSV, CSV, Binary) and learn how to structure your storage layer using Views, Managed Tables, and External Tables under modern governance frameworks.
 
-Refer to **image_b9238b.png** (or your course dashboard) for the lesson sequence covered in this module.
+Refer to `image_b9238b.png` (or your course dashboard) for the lesson sequence covered in this module.
 
 ---
 
@@ -14,7 +14,7 @@ Refer to **image_b9238b.png** (or your course dashboard) for the lesson sequence
 
 ---
 
-## Section Modules
+## Curriculum Breakdown
 
 | Lesson # | Title | Duration | Key Learning Outcome |
 | --- | --- | --- | --- |
@@ -45,8 +45,6 @@ SELECT * FROM read_files(
 );
 
 ```
-
-
 * **Why it matters:** It automatically exposes hidden file-level metadata columns (such as `_metadata.file_name`, `_metadata.file_size`, and `_metadata.file_block_start`), allowing you to audit file ingestion sources directly in your select statements.
 
 ### 2. Table Objects: Managed vs. External
@@ -54,9 +52,9 @@ SELECT * FROM read_files(
 * **Managed Tables:** Unity Catalog completely controls both the metadata registration and the underlying physical Parquet data files inside your workspace's default storage root. If you execute a `DROP TABLE` command, **both the metadata and the actual physical data files are permanently deleted.**
 * **External Tables:** You provision an explicit external storage path using the `LOCATION` clause. Databricks manages only the metadata catalog state. If you execute a `DROP TABLE` command, **only the catalog reference is removed; the physical underlying raw data files remain completely safe in your cloud bucket.** This is the architectural standard for Bronze-layer historical extraction.
 
-### 3. The Unity Catalog Enforcement Boundaries (Lesson 43)
+### 3. Unity Catalog Enforcement Boundaries (Lesson 43)
 
-Workspaces established after recent platform updates operate under a modern governance framework. Legacy, unmanaged patterns are disabled by default:
+Workspaces established under modern governance frameworks disable legacy, unmanaged patterns by default:
 
 * **Hive Metastore Deprecation:** The legacy `hive_metastore` catalog is locked down. Every new table asset must reside inside a Unity Catalog metastore container.
 * **DBFS Root Restriction:** Accessing the un-governed `dbfs:/` root is heavily restricted. Storage paths must use **Unity Catalog Volumes** or secure **External Locations**.
@@ -66,16 +64,16 @@ Workspaces established after recent platform updates operate under a modern gove
 
 ## Pro-Tips for Data Engineers
 
-1. **Leverage the Colon Operator (`:`) for Semi-Structured JSON:** Avoid writing convoluted extraction regex string splits. When querying nested JSON blobs, use the inline path traversal operator to navigate keys cleanly:
+* **Leverage the Colon Operator (`:`) for Semi-Structured JSON:** Avoid writing convoluted extraction regex string splits. When querying nested JSON blobs, use the inline path traversal operator to navigate keys cleanly:
 ```sql
 SELECT payload:user:identity:email_address AS user_email FROM bronze.raw_events;
 
 ```
 
 
-2. **Scoping Virtual Assets Responsibly:** Use `CREATE OR REPLACE TEMPORARY VIEW` for intermediate transformation steps that only need to live for the duration of your active notebook session. If you need a view to persist across different user sessions or separate clusters, promote it to a standard permanent view inside a shared Unity Catalog schema.
-3. **Idempotent Table Initialization:** When setting up your multi-hop landing zones, prefer the stability of `CREATE TABLE IF NOT EXISTS` or `CREATE OR REPLACE TABLE` (CRAS) patterns over simple create clauses to keep automated job tasks from failing due to object name naming collisions.
+* **Scoping Virtual Assets Responsibly:** Use `CREATE OR REPLACE TEMPORARY VIEW` for intermediate transformation steps that only need to live for the duration of your active notebook session. If you need a view to persist across different user sessions or separate clusters, promote it to a standard permanent view inside a shared Unity Catalog schema.
+* **Idempotent Table Initialization:** When setting up your multi-hop landing zones, prefer the stability of `CREATE TABLE IF NOT EXISTS` or `CREATE OR REPLACE TABLE` (CTAS) patterns over simple create clauses to keep automated job tasks from failing due to object naming collisions.
 
 ---
 
-[← Back to Section 6: Introduction to Databricks Workspace Architecture](https://www.google.com/search?q=./section06-readme.md) | [Next Section: Section 8: Advanced Transformations & Delta Lake Internals →](https://www.google.com/search?q=./section08-readme.md)
+[← Back to Section 6: Data Objects in the Lakehouse](https://www.google.com/search?q=./section06-readme.md) | [Next Section: Section 8: Apache Spark — Transforming Data (SQL) →](https://www.google.com/search?q=./section08-readme.md)
