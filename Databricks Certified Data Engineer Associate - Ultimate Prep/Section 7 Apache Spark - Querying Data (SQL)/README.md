@@ -24,7 +24,7 @@ Refer to `image_b9238b.png` (or your course dashboard) for the lesson sequence c
 | **39/40** | **Binary File Extraction** | 5 min | Ingesting non-textual raw streams and evaluating necessary cluster parameters. |
 | **41** | **`read_files` Function (TSV)** | 9 min | Utilizing the native table-valued function to stream tab-separated records. |
 | **42** | **CSV via External Table** | 15 min | Declaring explicit schemas and cloud pointer locations for unmanaged data storage. |
-| **43** | **⚠️ Mandatory Security Update** | 1 min | Understanding strict Unity Catalog enforcement policies for modern workspaces. |
+| **43** | **Mandatory Security Update** | 1 min | Understanding strict Unity Catalog enforcement policies for modern workspaces. |
 | **44** | **SQL Table via External Table** | 14 min | Orchestrating multi-layer data extractions for transactional database targets. |
 | **45** | **Querying via PySpark** | 8 min | Bridging the gap between declarative SQL text and the DataFrame API. |
 
@@ -45,6 +45,8 @@ SELECT * FROM read_files(
 );
 
 ```
+
+
 * **Why it matters:** It automatically exposes hidden file-level metadata columns (such as `_metadata.file_name`, `_metadata.file_size`, and `_metadata.file_block_start`), allowing you to audit file ingestion sources directly in your select statements.
 
 ### 2. Table Objects: Managed vs. External
