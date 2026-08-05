@@ -2,7 +2,7 @@
 
 This section deep dives into **Delta Lake**, the open-source storage layer that brings ACID transactions, data reliability, and high performance to your cloud data lakes. The curriculum bridges foundational file abstractions with modern physical storage layout strategies—focusing heavily on the transition from legacy, manual tuning configurations to automated, self-tuning storage engines.
 
-Refer to **image_1bb157.png** for the lesson sequence covered in this module.
+Refer to `image_1bb157.png` for the lesson sequence covered in this module.
 
 ---
 
@@ -56,7 +56,7 @@ SELECT * FROM production.silver.telecom_events VERSION AS OF 12;
 * **`COPY INTO`**: A declarative, idempotent SQL utility designed to incrementally load files from a cloud directory into a Delta table. It maintains an internal ingestion history log, skipping files that have already been processed to prevent duplicates.
 * **`MERGE INTO`**: The foundation of transactional logic, enabling upserts, structural deletes, and Type 2 SCD (Slowly Changing Dimensions) record modifications in a single atomic pass.
 
-### 97. Compaction - OPTIMIZE and ZORDER (11 min)
+### 97. Compaction — OPTIMIZE and ZORDER (11 min)
 
 * **Bin-Packing (`OPTIMIZE`)**: Resolves the small-file bottleneck by merging fragmented, Kilobyte-sized streaming files into large, uniform, sequential file blocks (~1 GB target size) to minimize cloud object store API read overhead.
 * **Z-Ordering Multi-Dimensional Co-Location**: Organizing records along space-filling curves to optimize multi-column data skipping during filtering operations. By co-locating related attributes inside the same physical files, the query planner can check file statistics and skip massive data blocks at runtime.
@@ -66,13 +66,13 @@ OPTIMIZE production.silver.telecom_events ZORDER BY (device_id, event_date);
 
 ```
 
-### 98. Liquid Clustering (4 min — *2026 Core Feature*)
+### 98. Liquid Clustering (4 min)
 
 * **The Modern Layout Standard**: Liquid Clustering replaces legacy table partitioning and Z-Ordering models. It eliminates rigid, predefined folder trees and high-overhead rewrites, providing an automated physical layout engine.
 * **Dynamic Clustering Keys**: As new records land in storage, Liquid Clustering dynamically fragments and reorganizes data files based on designated clustering columns. This approach maintains high-performance data skipping even as query filters pivot over time.
 * **Predictive Automation**: Managed tables can use `CLUSTER BY AUTO`, allowing the platform to analyze query history telemetry and dynamically manage clustering layouts behind the scenes without manual engineering intervention.
 ```sql
--- Modern 2026 Declarative Table Layout Pattern
+-- Modern Declarative Table Layout Pattern
 CREATE OR REPLACE TABLE production.silver.telecom_events (
     device_id STRING,
     event_timestamp TIMESTAMP,
@@ -80,7 +80,8 @@ CREATE OR REPLACE TABLE production.silver.telecom_events (
 ) CLUSTER BY (device_id);
 
 ```
-### 99. Remove Unused Files - VACUUM (8 min)
+
+### 99. Remove Unused Files — VACUUM (8 min)
 
 * **Storage Reclamation**: Permanently purging raw Parquet files that have been logically deleted or superseded by newer commits.
 * **The Retention Safety Window**: By default, `VACUUM` blocks attempts to clear files younger than 7 days (`vacuum.retentionDurationCheckEnabled = true`). This safeguard ensures that concurrent active writers or long-running downstream time travel queries do not crash due to missing file blocks.
