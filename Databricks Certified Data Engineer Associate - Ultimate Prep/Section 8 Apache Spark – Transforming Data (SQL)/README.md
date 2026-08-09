@@ -28,8 +28,6 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 * **Payments & Refunds**: Standardizing transactional currency boundaries, isolating monetary anomalies, and transforming erratic timestamp formats into explicit, unified timestamp definitions (`CAST(timestamp AS TIMESTAMP)`).
 * **Addresses**: Standardizing postal codes, correcting geographical field variances, and scrubbing unverified entries to prepare datasets for multi-table relational matching.
 
-
-
 ### 52–54. Handling Complex Orders Data (JSON) (26 min)
 
 * **Semi-Structured Ingestion Paths**: Resolving nested schema obstacles common in modern web telemetry data:
@@ -37,23 +35,17 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 * **Strict Typing Blocks**: Applying `from_json()` paired with an explicit `StructType` layout map to parse raw strings into query-optimized nested records.
 * **Array Verticalization**: Implementing the **`explode()`** function to unpack array structures into distinct vertical rows, turning a single order record with multiple nested items into uniform line-item entries.
 
-
-
 ### 55–56. Relational Operations & Aggregations (15 min)
 
 * **Gold-Tier Accumulations**: Joining distinct data models to synthesize high-level, business-ready consumption layers:
 * **Performance Joins**: Connecting conformed transactional tables with master customer tables via optimized `INNER` and `LEFT` join topologies.
 * **Chronological Reporting Matrices**: Truncating tracking data points using `date_trunc('month', event_timestamp)` combined with `GROUP BY` aggregates to calculate multi-million row business indicators like rolling monthly GMV and volume splits.
 
-
-
 ### 57–59. Advanced Spark SQL Functions (29 min)
 
 * **Extending the SQL Dialect**: Introducing advanced logic blocks for processing highly nested data structures without sacrificing performance:
 * **The UDF Bottleneck Warning**: Implementing user-defined functions (UDFs) for niche business routing logic, while analyzing the high serialization penalties introduced by moving data outside native Spark memory boundaries.
 * **Higher-Order Functions**: Writing modern inline functional operations—such as `transform()`, `filter()`, and `exists()`—combined with inline anonymous lambda expressions ($\lambda$) to update or prune complex array matrices directly on the spot, avoiding expensive row multiplication shuffles.
-
-
 
 ---
 
