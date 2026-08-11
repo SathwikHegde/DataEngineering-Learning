@@ -14,7 +14,7 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 ---
 
-## Curriculum Breakdown
+## rriculum Breakdown
 
 ### 31. ETL With Apache Spark – Overview (3 min)
 
@@ -48,7 +48,6 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 $$\text{Catalog} \longrightarrow \text{Schema (Database)} \longrightarrow \text{Table / View / Volume}$$
 
-
 * **Compute Access Modes**: Configuring cluster authorization requirements. Activating Unity Catalog data protection features (such as dynamic data masking and lineage tracking) requires spinning up clusters running on strict **Shared** (multi-user isolation) or **Single User** access modes.
 
 ---
@@ -74,4 +73,4 @@ Before launching into the subsequent coding labs, verify that your active develo
 
 ---
 
-[← Back to Section 5: Introduction to Unity Catalog Governance](https://www.google.com/search?q=./section05-readme.md) | [Next Section: Section 7: Apache Spark - Querying Data (SQL) →](https://www.google.com/search?q=./section07-readme.md)
+[← Back to Section 5: Introduction to Unity Catalog](https://www.google.com/search?q=./section05-readme.md) | [Next Section: Section 7: Apache Spark — Querying Data (SQL) →](https://www.google.com/search?q=./section07-readme.md)
