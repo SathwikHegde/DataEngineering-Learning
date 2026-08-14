@@ -1,6 +1,6 @@
 # Section 19: Delta Sharing & Lakehouse Federation
 
-This section covers **Delta Sharing** and **Lakehouse Federation**, two architectural capabilities enabled by Unity Catalog that allow organizations to break down data silos securely. You will learn how to share data outside your Databricks environment with zero replication, and how to execute distributed queries across external database engines natively from your Lakehouse platform.
+This section details the technical architecture and operational mechanics of **Delta Sharing** and **Lakehouse Federation**. Enabled via Unity Catalog, these features provide cross-organizational data exchange without physical data replication and enable distributed query virtualization across heterogeneous external database engines directly from the Lakehouse platform.
 
 Refer to `image_1105ec.png` for the lesson timeline and curriculum sequence.
 
@@ -10,7 +10,7 @@ Refer to `image_1105ec.png` for the lesson timeline and curriculum sequence.
 
 * **Total Duration:** 52 minutes
 * **Total Lessons:** 5
-* **Primary Focus:** Secure cross-organization data sharing, open sharing protocol mechanics, and data virtualization across third-party relational engines.
+* **Primary Focus:** Delta Sharing REST protocol mechanics, short-lived pre-signed URL token vending, zero-copy cross-platform data access, and federated pushdown query virtualization.
 
 ---
 
@@ -18,39 +18,64 @@ Refer to `image_1105ec.png` for the lesson timeline and curriculum sequence.
 
 ### 131. Introduction to Delta Sharing (11 min)
 
-* **The Traditional Disruption**: Legacy data sharing requires duplicating physical assets, maintaining high-overhead SFTP cron jobs, or forcing external consumers onto the exact same vendor cloud platform.
-* **The Open-Source Solution**: **Delta Sharing** is an open protocol for secure data sharing. It allows you to expose live, read-only tables, views, and managed Volumes directly to consumers—regardless of whether they operate within Databricks or use standard tools like pandas, Power BI, Excel, or open Apache Spark.
-
-* **Underlying Protocol Mechanics**: The protocol abstracts storage layer complexity. Unity Catalog acts as the token-vending authorization server, validating requests and returning secure, short-lived, pre-signed storage URLs directly to the client.
+* **Protocol Architecture**: Delta Sharing is an open REST-based protocol designed for secure, read-only data sharing across distinct cloud tenants and heterogeneous compute platforms without physical data replication or ETL maintenance.
+* **Token-Vending Authorization Flow**: Unity Catalog functions as an authorization and authentication server. When a client issues a query against a shared table, the provider's metastore authenticates the request, generates short-lived, pre-signed cloud storage access URLs (e.g., AWS S3 pre-signed URLs or Azure ADLS Gen2 SAS tokens), and returns them to the client. The client compute engine then reads Parquet data blocks directly from the provider's cloud storage bucket.
+* **Supported Securable Assets**: Shares can encapsulate Delta Lake tables, Materialized Views, dynamic Views, and Unity Catalog Volumes (for unstructured data assets).
 
 ### 132 & 133. Databricks-to-Databricks & Open Delta Sharing Demo (17 min + 6 min)
 
-* **Databricks-to-Databricks Sharing**: A live walkthrough showing a zero-copy sharing implementation between two isolated corporate workspaces. The receiving organization mounts the shared asset instantly, map-linking it as a standard native catalog within their local Unity Catalog namespace.
-* **Open Sharing Workflows**: Accessing data from non-Databricks environments. The data provider generates a secure `.share` activation file containing an encrypted, short-lived token credential. The consumer reads the data stream securely using open-source connection profiles:
+* **Databricks-to-Databricks Zero-Copy Mechanics**: In Databricks-to-Databricks workflows, the recipient metastore authenticates via unique Unity Catalog identifier tokens. The recipient binds the provider's shared assets directly into their local 3-tier namespace as a shared catalog (`CREATE CATALOG USING SHARE provider_name.share_name`), maintaining central governance while eliminating file transfers.
+* **Open Delta Sharing Client Integration**: Non-Databricks clients consume shared assets using official open-source connectors (e.g., Python `delta-sharing`, Apache Spark, Pandas, Power BI). The provider issues a secure `.share` activation file containing endpoint URLs and encrypted bearer tokens:
+
 ```python
 import delta_sharing
 
-# Reading a live provider table natively into a local Python pandas DataFrame
-profile_path = "path/to/config.share"
+# Authenticating via bearer token config and fetching remote table metadata
+profile_path = "config/production_provider.share"
 client = delta_sharing.SharingClient(profile_path)
 
-df = delta_sharing.load_as_pandas(client.list_all_tables()[0])
+# Extracting shared table reference directly into a pandas DataFrame via pre-signed URLs
+tables = client.list_all_tables()
+df = delta_sharing.load_as_pandas(tables[0])
 
-``
+```
 
 ### 134 & 135. Introduction to Lakehouse Federation & Demo (7 min + 12 min)
 
-* **Distributed Data Virtualization**: Configuring **Lakehouse Federation** to query external database engines (such as PostgreSQL, MySQL, Snowflake, Azure SQL, or AWS Redshift) natively from your workspace without moving the data.
-* **Intelligent Query Pushdown**: Unity Catalog automatically translates your high-level Spark SQL statements into the native dialect of the target relational system. It pushes predicate evaluations, filters, and aggregations down to the remote database hardware to minimize network latency.
-* **Hands-on Federation Setup**: Registering an explicit `CONNECTION` object inside Catalog Explorer, mapping remote databases to local catalogs, and executing multi-engine federated joins across live systems.
+* **Heterogeneous Data Virtualization**: Lakehouse Federation allows Unity Catalog to query external relational database engines (including PostgreSQL, MySQL, Snowflake, Amazon Redshift, Azure SQL, and Google BigQuery) without staging or copying physical data.
+* **Catalyst Optimizer Pushdown Evaluation**: Unity Catalog maps remote database schemas to local catalog namespaces using registered `CONNECTION` objects. During query execution, the Catalyst Optimizer translates Spark SQL expressions into the target engine's native SQL dialect, pushing filters, predicates, projections, and aggregate evaluations down to the remote database tier to minimize network I/O and driver memory overhead.
+* **Federated Catalog Binding Syntax**:
+
+```sql
+-- Registering a federated connection object to a PostgreSQL cluster
+CREATE CONNECTION postgres_prod
+TYPE POSTGRESQL
+OPTIONS (
+  host 'db.internal.network',
+  port '5432',
+  user secret('jdbc-scope', 'username'),
+  password secret('jdbc-scope', 'password')
+);
+
+-- Mapping remote database schemas directly into Unity Catalog
+CREATE FOREIGN CATALOG postgres_finance
+USING CONNECTION postgres_prod
+OPTIONS (database 'finance_db');
+
+```
 
 ---
 
 ## Important Exam Considerations
 
-* **Zero-Copy Architecture Rules**: For the certification exam, remember that Delta Sharing **never duplicates or replicates data**. The consumer reads underlying data blocks directly from the provider's cloud storage buckets using secure, short-lived SAS or IAM tokens vended by the provider's metastore.
-* **The Sharing Security Object Model**: In Unity Catalog, a **Share** is a securable object wrapper containing a read-only collection of tables, views, or volumes. A **Recipient** is the metadata object defining the consumer's authenticated token profile.
-* **Federation vs. Batch Ingestion Workloads**: While Lakehouse Federation is ideal for ad-hoc exploration, virtualized lookups, and low-volume discovery, heavy production data streams must be ingested physically into Delta Lake using **Lakeflow Connect** or **Auto Loader** to avoid putting operational stress on source relational engines.
+* **Zero-Copy Protocol Invariants**: Delta Sharing never replicates underlying physical Parquet files. Data reads occur directly against the provider's storage layer using short-lived pre-signed URLs vended by the provider's Unity Catalog metastore.
+* **Securable Sharing Hierarchy**:
+* **Share**: A securable container object defined by the provider holding read-only references to tables, views, or volumes.
+* **Recipient**: A metastore object representing the target identity or external organization authorized to consume specified Shares.
+* **Provider**: An entity object that represents the source metastore sharing data assets.
+
+
+* **Workload Selection Criteria (Federation vs. Physical Ingestion)**: Lakehouse Federation is engineered for real-time virtualized lookups, ad-hoc cross-system joins, and low-volume queries. Heavy ETL operations, high-concurrency BI reporting, and large-scale data processing must ingest target tables physically into Delta Lake using **Lakeflow Connect** or **Auto Loader** to prevent query execution bottlenecks and resource exhaustion on source relational systems.
 
 ---
 
