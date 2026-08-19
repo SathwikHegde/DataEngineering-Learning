@@ -1,57 +1,112 @@
-# Section 5: Introduction to Unity Catalog
+# Section 15: Lakeflow Spark Declarative Pipelines (SDP) — Project
 
-This section serves as the definitive guide to **Unity Catalog (UC)**, the unified governance layer for the Databricks Data Intelligence Platform. Understanding UC is critical for the Associate certification, as it marks the shift from workspace-local data management to a centralized, cross-workspace governance model.
+This section delivers an end-to-end, production-grade implementation project using **Lakeflow Spark Declarative Pipelines (SDP)** (formerly Delta Live Tables / DLT). Over the course of 2 hours and 40 minutes, you will build a complete Medallion architecture—progressing from raw multi-source ingestion to conformed analytical consumption layers while enforcing data quality validation frameworks, Change Data Capture (CDC) synchronization, and multi-catalog Unity Catalog governance.
+
+Refer to `image_08e047.png` for the complete sequence of project implementation tasks.
 
 ---
 
 ## Section Overview
 
-* **Total Duration:** 50 minutes
-* **Total Lessons:** 6
-* **Primary Focus:** Transitioning from the legacy Hive Metastore to the 3-tier namespace and securing cloud storage.
+* **Total Duration:** 2 Hours 40 Minutes
+* **Total Modules:** 14
+* **Core Objective:** Implement a multi-hop Medallion DAG using declarative SQL and Python APIs, enforce data governance constraints with Expectations, execute automated SCD Type 1 and Type 2 synchronization via `APPLY CHANGES INTO`, and orchestrate cross-catalog schema publication.
 
 ---
 
-## Curriculum Breakdown
+## Project Implementation Breakdown
 
-| Lesson # | Title | Duration | Key Learning Outcome |
-| --- | --- | --- | --- |
-| **25** | **Introduction to Unity Catalog** | 6 min | Overview of unified governance for data and AI. |
-| **26** | **UC / Hive Metastore Object Model** | 6 min | Understanding the transition from 2-tier to 3-tier naming. |
-| **27** | **Create Unity Catalog Metastore** | 14 min | Step-by-step walkthrough of creating the regional metastore. |
-| **28** | **Cluster Configurations for UC** | 4 min | Configuring "Shared" or "Single User" access modes. |
-| **29** | **Configure Access to Cloud Storage (Lecture)** | 5 min | Overview of Storage Credentials and External Locations. |
-| **30** | **Configure Access to Cloud Storage (Demo)** | 14 min | Demo of connecting Databricks to Azure Data Lake Storage. |
+| Module | Title | Duration | Language | Technical Focus Area |
+| --- | --- | --- | --- | --- |
+| **104** | **Project Overview** | 2 min | — | System topology, schema contracts, and architecture requirements. |
+| **105** | **Cluster Configuration & Azure VM Quota** | 12 min | — | Sizing dedicated DLT cluster runtimes within cloud compute subscription limits. |
+| **106** | **Project Environment Set-up** | 14 min | — | Storage provisioning, sample telemetry staging, and source path mapping. |
+| **107** | **Intro to Streaming Tables** | 10 min | SQL | Incremental append ingestion using `CREATE OR REFRESH STREAMING TABLE`. |
+| **108** | **Recent Changes to the UI** | 2 min | — | Telemetry monitoring, DAG visualization, and data quality metrics dashboards. |
+| **109** | **Create CircuitBox Pipeline** | 25 min | — | Pipeline graph definition, target catalog binding, and compilation analysis. |
+| **110** | **Intro to SDP Expectations** | 19 min | SQL | Declarative constraint enforcement (`ALLOW`, `DROP`, `FAIL`) via SQL. |
+| **111** | **Intro to Apply Changes** | 17 min | SQL | CDC ingestion and state synchronization implementing **SCD Type 1**. |
+| **112** | **Creating SDP Datasets** | 12 min | Python | Multi-language DAG extension leveraging the `dlt` PySpark module. |
+| **113** | **Implementing SDP Expectations** | 11 min | Python | Programmatic data validation rules using `@dlt.expect` decorators. |
+| **114** | **Implementing Slowly Changing Dimensions** | 10 min | Python | Historical lineage tracking via `dlt.apply_changes()` for **SCD Type 2**. |
+| **115** | **Process Orders Data — Assignment** | 10 min | Polyglot | Independent module building the relational Silver-tier order processing stage. |
+| **116** | **Intro to Materialized Views** | 16 min | Polyglot | Pre-computed, incrementally refreshed Gold aggregations using Materialized Views. |
+| **117** | **Publish to Multiple Catalogs/Schemas** | 1 min | — | Centralized multi-namespace deployment within the Unity Catalog hierarchy. |
 
 ---
 
-## Core Architectural Shifts
+## Core Architectural Implementation Concepts
 
-### 1. The 3-Tier Namespace
+### 1. Declarative Data Quality Enforcement (Expectations)
 
-Unity Catalog organizes data assets using a **three-tier hierarchy**:
+Expectations integrate data quality validation directly into the pipeline execution graph without interrupting the underlying streaming query plan. Validation policies are evaluated at the row level with three distinct enforcement actions:
 
-1. **Catalog:** The highest level of the container (e.g., `production`).
-2. **Schema (Database):** A logical grouping within a catalog.
-3. **Table / View / Volume:** The actual data object (e.g., `production.silver.customers`).
+* **`ON VIOLATION ALLOW` (Retain & Track)**: Logs constraint violation telemetry to the internal event log while allowing invalid rows to flow downstream.
+```sql
+CONSTRAINT valid_timestamp EXPECT (event_timestamp <= current_timestamp()) ON VIOLATION ALLOW
 
-### 2. Unified Governance
+```
 
-Unlike the legacy **Hive Metastore**, which is often siloed within a single workspace, a **Unity Catalog Metastore** is a top-level container that can be assigned to multiple workspaces in the same region. This allows for centralized auditing, lineage tracking, and permission management across the entire enterprise.
 
-### 3. Securing Cloud Infrastructure
+* **`ON VIOLATION DROP` (Filter Invalid)**: Atomically drops rows that fail the boolean predicate before they reach target storage, preventing downstream pipeline contamination.
+```sql
+CONSTRAINT positive_price EXPECT (unit_price > 0) ON VIOLATION DROP
 
-* **Storage Credentials:** Securely encapsulate identity management (Service Principal or Managed Identity) used to authenticate with cloud storage buckets.
-* **External Locations:** Define specific cloud storage paths governed by Unity Catalog, eliminating the need for users to manage raw storage keys or SAS tokens directly.
+```
+
+
+* **`ON VIOLATION FAIL` (Halt Execution)**: Immediately aborts pipeline execution and throws a runtime exception if any row violates critical business constraints.
+```sql
+CONSTRAINT valid_id EXPECT (order_id IS NOT NULL) ON VIOLATION FAIL
+
+```
+
+
+
+### 2. Change Data Capture via `APPLY CHANGES INTO`
+
+The declarative `APPLY CHANGES INTO` API abstracts manual, high-overhead `MERGE INTO` operations, handling out-of-order records, late-arriving updates, and schema synchronization automatically:
+
+* **SCD Type 1 (Deterministic Overwrite)**: Maintains current state by overwriting existing records matching the declared `KEYS` with the latest record based on `SEQUENCE BY` ordering.
+```sql
+APPLY CHANGES INTO live.dim_customers
+FROM stream(live.stage_customers)
+KEYS (customer_id)
+APPLY AS DELETE WHEN operation = 'DELETE'
+SEQUENCE BY event_timestamp
+COLUMNS * EXCEPT (operation);
+
+```
+
+
+* **SCD Type 2 (Historical Version Tracking)**: Preserves historical state by maintaining row-level validity intervals using automated metadata columns (`__START_AT`, `__END_AT`), setting `__END_AT = NULL` for the active version record.
+```python
+dlt.apply_changes(
+    target="dim_customers_scd2",
+    source="stage_customers",
+    keys=["customer_id"],
+    sequence_by="event_timestamp",
+    apply_as_deletes="operation = 'DELETE'",
+    stored_as_scd_type="2",
+)
+
+```
+
+
+
+### 3. Streaming Tables vs. Materialized Views
+
+* **Streaming Tables (`STREAMING TABLE`)**: Backed by Spark Structured Streaming engines and checkpoint directories. They ingest append-only, high-throughput source data incrementally, processing each file or transaction log record exactly once.
+* **Materialized Views (`MATERIALIZED VIEW`)**: Compute deterministic, pre-aggregated query states over historical or upstream datasets. Incremental refresh engines automatically compute only the net changes from the source tables, optimizing read-side query performance for downstream consumers and business intelligence dashboards.
 
 ---
 
 ## Important Exam Considerations
 
-* **One Metastore per Region**: A single Unity Catalog metastore is typically deployed per cloud region per account and mapped across multiple workspaces.
-* **Compute Access Modes**: To query UC-governed assets, compute clusters must be configured with supported UC access modes (**Shared** or **Single User**). Legacy "No Isolation" modes cannot access UC tables.
-* **Governance Inheritance**: Permissions granted via `GRANT` / `REVOKE` cascade downwards through the object hierarchy from Catalog down to Schema and individual Tables/Views.
+* **Polyglot Pipeline Isolation Boundaries**: A single Lakeflow Declarative Pipeline DAG can execute both SQL and Python source artifacts concurrently. However, **individual source files must be homogeneous**—mixing SQL and Python code within the same notebook is strictly prohibited.
+* **Unified Namespace Deployment**: Pipelines managed by Unity Catalog support writing outputs to specific 3-tier namespaces (`catalog.schema.table`), allowing Bronze, Silver, and Gold targets to be published to distinct governance catalogs within a single pipeline configuration.
+* **DLT Event Log Telemetry**: System metrics, execution lineage, and data quality expectation statistics are automatically recorded in an internal Delta table (the DLT Event Log). You can query this event log directly using Spark SQL to audit historical pipeline run durations, expectation drop ratios, and failure root causes.
 
 ---
 
-[← Back to Section 4: Databricks Workspace Architecture & Developer Tools](https://www.google.com/search?q=./section04-readme.md) | [Next Section: Section 6: Data Objects in the Lakehouse →](https://www.google.com/search?q=./section06-readme.md)
+[← Back to Section 14: Lakeflow Declarative Pipelines Overview](https://www.google.com/search?q=./section14-readme.md) | [Next Section: Section 16: Lakeflow Jobs & Workflow Orchestration →](https://www.google.com/search?q=./section16-readme.md)
