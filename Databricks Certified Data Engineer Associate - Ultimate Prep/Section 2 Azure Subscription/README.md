@@ -1,8 +1,8 @@
 # Section 2: Azure Subscription Setup & Environment Preparation
 
-This section guides you through building your core cloud infrastructure. Because Azure Databricks runs directly within your managed cloud tenant, configuring a fresh Azure subscription is the essential first step before deploying compute workspaces, data lakes, and secure storage layers.
+This section establishes the foundational cloud infrastructure required to host enterprise-grade Databricks workspaces. Because Azure Databricks operates as a first-party, managed Software-as-a-Service (SaaS) and Platform-as-a-Service (PaaS) offering deeply integrated with Microsoft Azure, configuring a compliant subscription, identity perimeter, and resource hierarchy is the critical prerequisite prior to provisioning compute planes, Delta storage lakes, and Unity Catalog metastores.
 
-*Review your course dashboard to access the video lectures and time-coded walkthroughs for this section.*
+Review your course dashboard to access the video lectures and synchronized walkthroughs for this section.
 
 ---
 
@@ -10,7 +10,7 @@ This section guides you through building your core cloud infrastructure. Because
 
 * **Total Duration:** 10 minutes
 * **Total Lessons:** 2
-* **Primary Focus:** Azure account creation, cloud credit management, portal interface navigation, and resource organization.
+* **Primary Focus:** Azure Tenant and Subscription architecture, cloud entitlement and credit allocations, Azure Resource Manager (ARM) hierarchy, and proactive cost guardrails.
 
 ---
 
@@ -18,30 +18,40 @@ This section guides you through building your core cloud infrastructure. Because
 
 ### 1. Registering an Azure Free Account (6 min)
 
-* **Setting Up Your Sandbox**: A step-by-step walkthrough for creating a dedicated, safe learning environment. Your new account includes:
-* **$200 Trial Credit**: A $200 credit valid for 30 days to test and deploy any Azure resources.
-* **12 Months of Select Free Services**: Complimentary monthly allowances for key operational tools, including virtual machines and relational databases.
-* **Always-Free Tier**: Permanent access to foundational serverless functions, lightweight databases, and messaging hubs—even after your initial credits expire.
+* **Cloud Sandbox Provisioning**: Step-by-step walkthrough of creating an isolated Azure Entra ID (formerly Azure Active Directory) tenant and associated root subscription. The sandbox includes:
+* **$200 Evaluation Credit**: A 30-day initial credit allocation enabling risk-free provisioning of compute clusters, storage accounts, and networking infrastructure.
+* **12 Months of Tier-1 Services**: Extended allowances for core infrastructure components, including Linux/Windows compute instances, managed SQL databases, and standard object storage tiers.
+* **Always-Free Tier Capacities**: Permanent baseline access to serverless components, such as Azure Functions, Event Grid subscriptions, and Cosmos DB throughput tiers.
 
 
+* **Identity and Tenant Hierarchy**: Understanding how an Azure Subscription sits within a root Entra ID tenant, establishing the security perimeter where Role-Based Access Control (RBAC) and OAuth authorization tokens operate during workspace and storage integration.
 
-### 2. Navigating the Azure Portal (4 min)
+### 2. Navigating the Azure Portal & Resource Organization (4 min)
 
-* **Exploring the Management Dashboard**: A guided tour of the Azure Portal, focused on the tools you'll use as a data engineer:
-* **Resource Groups**: Learn to create logical boundaries (such as `rg-databricks-prep-01`) to isolate and manage permissions for all your Databricks and data lake assets.
-* **Global Search & Discovery**: Quickly locate essential resources, specifically **Azure Databricks Workspaces** and **Azure Data Lake Storage Gen2 (ADLS Gen2)** accounts.
-* **Azure Marketplace**: Provision official managed services and pre-configured software templates directly into your environment.
-* **Cost Management & Budgets**: Set up automated spending alerts to monitor your remaining free credits and prevent unexpected charges.
+* **Azure Resource Manager (ARM) Architecture**: Navigating the unified management layer used to create, update, and delete cloud resources declaratively and imperatively across regions.
+* **Resource Group Boundary Isolation**:
+* Implementing structured Resource Groups (e.g., `rg-databricks-dev-eastus-001`) to serve as logical management containers for all project-related assets.
+* Leveraging Resource Groups to enforce unified lifecycle policies, regional data residency boundaries, and localized RBAC role assignments (`Contributor`, `Owner`, `Reader`).
+
+
+* **Core Data Engineering Service Discovery**:
+* **Azure Databricks Workspaces**: Locating and registering the `Microsoft.Databricks` resource provider to enable control plane and data plane deployment.
+* **Azure Data Lake Storage Gen2 (ADLS Gen2)**: Identifying hierarchical namespace (HNS) enabled storage accounts (`Microsoft.Storage`) necessary for hosting Delta Lake table structures and Unity Catalog external storage roots.
+
+
+* **Cost Management, Budgets, and Automated Alerts**:
+* Configuring proactive cost boundaries within **Azure Cost Management + Billing**.
+* Creating metric-driven budget alert thresholds (e.g., 50%, 75%, and 90% of total allocated credit) with automated email and webhook notifications to prevent runaway compute costs or unmonitored cluster idle times.
 
 
 
 ---
 
-## Key Takeaways for Data Engineers
+## Key Architectural Principles for Data Engineers
 
-* **Credit Card Verification**: You must provide a credit card during signup solely to confirm your identity. Azure places a protective spending limit on free accounts, so you won't be charged unless you explicitly choose to upgrade to a **Pay-As-You-Go** subscription.
-* **Selecting the Right Region**: When creating Resource Groups and storage, pick an Azure region geographically near you. This reduces network latency and ensures reliable access to compute capacity.
-* **Organized Cleanup**: Keep all lab resources inside dedicated, isolated Resource Groups. This makes teardown quick and simple when you complete a project, preventing idle clusters or stray storage accounts from draining your credits.
+* **Spending Caps and Transition Economics**: Azure automatically enforces a $0 spending limit on trial subscriptions to prevent inadvertent billing. When evaluating production workloads or transitioning to a **Pay-As-You-Go** subscription, strict budget monitoring and cluster auto-termination rules must be configured to control Databricks Unit (DBU) and virtual machine core consumption.
+* **Geographic Co-Location and Latency Mitigation**: All interconnected assets—including Resource Groups, Azure Databricks Workspaces, ADLS Gen2 storage accounts, and Unity Catalog access connectors—must be provisioned within the same Azure geographic region (e.g., `eastus` or `westus2`). Cross-region network traffic introduces severe network latency penalties and incurs billable egress bandwidth costs during large-scale Spark shuffles and data extraction tasks.
+* **Resource Lifecycle Encapsulation**: Placing all sandbox infrastructure components inside dedicated, project-specific Resource Groups enables atomic teardown. Deleting a single Resource Group automatically cascades and terminates all encapsulated storage containers, virtual networks, and managed compute nodes, ensuring no orphan resources consume cloud credits.
 
 ---
 
