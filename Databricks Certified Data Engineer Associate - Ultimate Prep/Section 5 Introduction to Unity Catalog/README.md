@@ -1,8 +1,8 @@
 # Section 15: Lakeflow Spark Declarative Pipelines (SDP) — Project
 
-This section delivers an end-to-end, production-grade implementation project using **Lakeflow Spark Declarative Pipelines (SDP)** (formerly Delta Live Tables / DLT). Over the course of 2 hours and 40 minutes, you will build a complete Medallion architecture—progressing from raw multi-source ingestion to conformed analytical consumption layers while enforcing data quality validation frameworks, Change Data Capture (CDC) synchronization, and multi-catalog Unity Catalog governance.
+This section details the end-to-end engineering and architectural execution of **Lakeflow Spark Declarative Pipelines (SDP)** (formerly Delta Live Tables / DLT). Spanning 2 hours and 40 minutes of hands-on implementation, this module focuses on constructing an enterprise-grade Medallion architecture—progressing from raw multi-protocol ingestion to conformed Gold consumption layers while enforcing row-level data quality expectations, Change Data Capture (CDC) synchronization, and Unity Catalog multi-namespace governance.
 
-Refer to `image_08e047.png` for the complete sequence of project implementation tasks.
+Refer to `image_08e047.png` for the detailed project implementation flow and task dependencies.
 
 ---
 
@@ -10,7 +10,7 @@ Refer to `image_08e047.png` for the complete sequence of project implementation 
 
 * **Total Duration:** 2 Hours 40 Minutes
 * **Total Modules:** 14
-* **Core Objective:** Implement a multi-hop Medallion DAG using declarative SQL and Python APIs, enforce data governance constraints with Expectations, execute automated SCD Type 1 and Type 2 synchronization via `APPLY CHANGES INTO`, and orchestrate cross-catalog schema publication.
+* **Core Objective:** Architect a polyglot Medallion Directed Acyclic Graph (DAG) using declarative SQL and Python APIs, implement constraint enforcement frameworks, automate Slowly Changing Dimension (SCD Type 1 and Type 2) synchronization via `APPLY CHANGES INTO`, and deploy centralized cross-catalog schema definitions.
 
 ---
 
@@ -18,20 +18,20 @@ Refer to `image_08e047.png` for the complete sequence of project implementation 
 
 | Module | Title | Duration | Language | Technical Focus Area |
 | --- | --- | --- | --- | --- |
-| **104** | **Project Overview** | 2 min | — | System topology, schema contracts, and architecture requirements. |
-| **105** | **Cluster Configuration & Azure VM Quota** | 12 min | — | Sizing dedicated DLT cluster runtimes within cloud compute subscription limits. |
-| **106** | **Project Environment Set-up** | 14 min | — | Storage provisioning, sample telemetry staging, and source path mapping. |
-| **107** | **Intro to Streaming Tables** | 10 min | SQL | Incremental append ingestion using `CREATE OR REFRESH STREAMING TABLE`. |
-| **108** | **Recent Changes to the UI** | 2 min | — | Telemetry monitoring, DAG visualization, and data quality metrics dashboards. |
-| **109** | **Create CircuitBox Pipeline** | 25 min | — | Pipeline graph definition, target catalog binding, and compilation analysis. |
-| **110** | **Intro to SDP Expectations** | 19 min | SQL | Declarative constraint enforcement (`ALLOW`, `DROP`, `FAIL`) via SQL. |
-| **111** | **Intro to Apply Changes** | 17 min | SQL | CDC ingestion and state synchronization implementing **SCD Type 1**. |
-| **112** | **Creating SDP Datasets** | 12 min | Python | Multi-language DAG extension leveraging the `dlt` PySpark module. |
-| **113** | **Implementing SDP Expectations** | 11 min | Python | Programmatic data validation rules using `@dlt.expect` decorators. |
-| **114** | **Implementing Slowly Changing Dimensions** | 10 min | Python | Historical lineage tracking via `dlt.apply_changes()` for **SCD Type 2**. |
-| **115** | **Process Orders Data — Assignment** | 10 min | Polyglot | Independent module building the relational Silver-tier order processing stage. |
-| **116** | **Intro to Materialized Views** | 16 min | Polyglot | Pre-computed, incrementally refreshed Gold aggregations using Materialized Views. |
-| **117** | **Publish to Multiple Catalogs/Schemas** | 1 min | — | Centralized multi-namespace deployment within the Unity Catalog hierarchy. |
+| **104** | **Project Overview** | 2 min | — | System topology, schema contracts, and downstream latency SLAs. |
+| **105** | **Cluster Configuration & Azure VM Quota** | 12 min | — | Sizing dedicated DLT cluster runtimes, worker core allocations, and VM quota limits. |
+| **106** | **Project Environment Set-up** | 14 min | — | Cloud storage staging, seeding source datasets, and mounting checkpoint paths. |
+| **107** | **Intro to Streaming Tables** | 10 min | SQL | Declarative append-only ingestion using `CREATE OR REFRESH STREAMING TABLE`. |
+| **108** | **Recent Changes to the UI** | 2 min | — | Pipeline graph visualizer, real-time compute metrics, and event log exploration. |
+| **109** | **Create CircuitBox Pipeline** | 25 min | — | Pipeline compilation, setting target schemas, and topological DAG dependency analysis. |
+| **110** | **Intro to SDP Expectations** | 19 min | SQL | SQL-based declarative data quality constraints (`ALLOW`, `DROP`, `FAIL`). |
+| **111** | **Intro to Apply Changes** | 17 min | SQL | Declarative CDC ingestion and state reconciliation implementing **SCD Type 1**. |
+| **112** | **Creating SDP Datasets** | 12 min | Python | Multi-language DAG extension leveraging the `@dlt.table` and `@dlt.view` decorators. |
+| **113** | **Implementing SDP Expectations** | 11 min | Python | Programmatic data validation rules using `@dlt.expect_*` Python decorators. |
+| **114** | **Implementing Slowly Changing Dimensions** | 10 min | Python | Historical lineage tracking via `dlt.apply_changes()` targeting **SCD Type 2**. |
+| **115** | **Process Orders Data — Assignment** | 10 min | Polyglot | Independent milestone building the relational Silver-tier order normalization stage. |
+| **116** | **Intro to Materialized Views** | 16 min | Polyglot | Incremental computation of aggregated Gold consumption layers via Materialized Views. |
+| **117** | **Publish to Multiple Catalogs/Schemas** | 1 min | — | Multi-namespace publication across development, staging, and production Unity Catalogs. |
 
 ---
 
@@ -39,23 +39,23 @@ Refer to `image_08e047.png` for the complete sequence of project implementation 
 
 ### 1. Declarative Data Quality Enforcement (Expectations)
 
-Expectations integrate data quality validation directly into the pipeline execution graph without interrupting the underlying streaming query plan. Validation policies are evaluated at the row level with three distinct enforcement actions:
+Expectations integrate data quality validation directly into the pipeline execution graph without breaking the underlying Spark Structured Streaming query plan. Constraints are evaluated row-by-row with three distinct operational enforcement actions:
 
-* **`ON VIOLATION ALLOW` (Retain & Track)**: Logs constraint violation telemetry to the internal event log while allowing invalid rows to flow downstream.
+* **`ON VIOLATION ALLOW` (Audit & Retain)**: Logs constraint violation metrics directly to the system event log while allowing non-compliant records to proceed downstream for auditing.
 ```sql
 CONSTRAINT valid_timestamp EXPECT (event_timestamp <= current_timestamp()) ON VIOLATION ALLOW
 
 ```
 
 
-* **`ON VIOLATION DROP` (Filter Invalid)**: Atomically drops rows that fail the boolean predicate before they reach target storage, preventing downstream pipeline contamination.
+* **`ON VIOLATION DROP` (Filter & Discard)**: Atomically drops rows that fail the boolean predicate before they are committed to destination Delta storage, preventing downstream dataset corruption.
 ```sql
 CONSTRAINT positive_price EXPECT (unit_price > 0) ON VIOLATION DROP
 
 ```
 
 
-* **`ON VIOLATION FAIL` (Halt Execution)**: Immediately aborts pipeline execution and throws a runtime exception if any row violates critical business constraints.
+* **`ON VIOLATION FAIL` (Abort Transaction)**: Halts pipeline execution immediately and returns a critical execution exception if any row violates the defined business rule.
 ```sql
 CONSTRAINT valid_id EXPECT (order_id IS NOT NULL) ON VIOLATION FAIL
 
@@ -65,9 +65,9 @@ CONSTRAINT valid_id EXPECT (order_id IS NOT NULL) ON VIOLATION FAIL
 
 ### 2. Change Data Capture via `APPLY CHANGES INTO`
 
-The declarative `APPLY CHANGES INTO` API abstracts manual, high-overhead `MERGE INTO` operations, handling out-of-order records, late-arriving updates, and schema synchronization automatically:
+The declarative `APPLY CHANGES INTO` abstraction eliminates the need to construct and tune manual `MERGE INTO` operations, automatically managing out-of-order records, late-arriving events, and schema synchronization:
 
-* **SCD Type 1 (Deterministic Overwrite)**: Maintains current state by overwriting existing records matching the declared `KEYS` with the latest record based on `SEQUENCE BY` ordering.
+* **SCD Type 1 (Deterministic Overwrite)**: Maintains the current record state by overwriting existing target rows matching the specified `KEYS` using `SEQUENCE BY` column ordering.
 ```sql
 APPLY CHANGES INTO live.dim_customers
 FROM stream(live.stage_customers)
@@ -79,8 +79,10 @@ COLUMNS * EXCEPT (operation);
 ```
 
 
-* **SCD Type 2 (Historical Version Tracking)**: Preserves historical state by maintaining row-level validity intervals using automated metadata columns (`__START_AT`, `__END_AT`), setting `__END_AT = NULL` for the active version record.
+* **SCD Type 2 (Historical Dimension Tracking)**: Preserves historical state intervals across changes, automatically generating and maintaining metadata tracking columns (`__START_AT`, `__END_AT`) and populating `__END_AT = NULL` for the active record version.
 ```python
+import dlt
+
 dlt.apply_changes(
     target="dim_customers_scd2",
     source="stage_customers",
@@ -96,16 +98,16 @@ dlt.apply_changes(
 
 ### 3. Streaming Tables vs. Materialized Views
 
-* **Streaming Tables (`STREAMING TABLE`)**: Backed by Spark Structured Streaming engines and checkpoint directories. They ingest append-only, high-throughput source data incrementally, processing each file or transaction log record exactly once.
-* **Materialized Views (`MATERIALIZED VIEW`)**: Compute deterministic, pre-aggregated query states over historical or upstream datasets. Incremental refresh engines automatically compute only the net changes from the source tables, optimizing read-side query performance for downstream consumers and business intelligence dashboards.
+* **Streaming Tables (`STREAMING TABLE`)**: Backed by the Spark Structured Streaming engine and dedicated state checkpoint directories. They process append-only, high-throughput source streams incrementally, ensuring each record or raw storage object is evaluated exactly once.
+* **Materialized Views (`MATERIALIZED VIEW`)**: Maintain pre-computed query states over upstream transactional tables or historical data stores. The incremental computation engine processes only the net delta changes from source tables during each refresh cycle, reducing latency and query compute costs for downstream BI consumers.
 
 ---
 
 ## Important Exam Considerations
 
-* **Polyglot Pipeline Isolation Boundaries**: A single Lakeflow Declarative Pipeline DAG can execute both SQL and Python source artifacts concurrently. However, **individual source files must be homogeneous**—mixing SQL and Python code within the same notebook is strictly prohibited.
-* **Unified Namespace Deployment**: Pipelines managed by Unity Catalog support writing outputs to specific 3-tier namespaces (`catalog.schema.table`), allowing Bronze, Silver, and Gold targets to be published to distinct governance catalogs within a single pipeline configuration.
-* **DLT Event Log Telemetry**: System metrics, execution lineage, and data quality expectation statistics are automatically recorded in an internal Delta table (the DLT Event Log). You can query this event log directly using Spark SQL to audit historical pipeline run durations, expectation drop ratios, and failure root causes.
+* **Polyglot Pipeline Homogeneity Rule**: While a single Lakeflow Declarative Pipeline DAG can coordinate tasks across both SQL and Python source files, **individual source files must be homogeneous**. Embedding Python cells within a SQL notebook (or `%sql` within Python modules) inside a declarative pipeline triggers a compilation failure.
+* **Target Catalog Routing**: Pipelines governed by Unity Catalog support direct output routing to explicit 3-tier namespaces (`catalog.schema.table`), allowing developers to deploy Bronze, Silver, and Gold objects to separate physical storage containers and access tiers from a single pipeline definition.
+* **DLT Event Log Telemetry**: Platform metrics, runtime graph dependencies, cluster configurations, and data quality pass/drop metrics are continuously written to an internal Delta table (the DLT Event Log). This log can be queried directly via Spark SQL to audit historical pipeline run durations, expectation drop ratios, and failure root causes.
 
 ---
 
