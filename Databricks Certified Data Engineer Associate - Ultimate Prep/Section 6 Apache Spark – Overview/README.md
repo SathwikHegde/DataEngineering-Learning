@@ -1,6 +1,6 @@
 # Section 6: Apache Spark — Overview & Architecture Staging
 
-This section transitions from theoretical foundations to the **technical implementation** of production data pipelines. It focuses on staging a modern "Lakehouse" architecture, where the distributed performance of Apache Spark intersects with the unified governance of Unity Catalog and the elastic scalability of cloud object storage.
+This section covers the technical architecture and staging requirements for deploying production data pipelines within an enterprise Lakehouse. The focus is on integrating the distributed compute capabilities of Apache Spark with cloud object storage infrastructures and the centralized governance protocols of Unity Catalog.
 
 Refer to your course dashboard for the matching lesson timeline and video assets.
 
@@ -10,45 +10,45 @@ Refer to your course dashboard for the matching lesson timeline and video assets
 
 * **Total Duration:** 36 minutes
 * **Total Lessons:** 4
-* **Primary Focus:** Distributed ETL paradigms, the Medallion data design lifecycle, cloud data lake storage isolation, and Unity Catalog governance structures.
+* **Primary Focus:** Distributed execution mechanics, multi-hop Medallion lifecycle design, object storage isolation, and Unity Catalog metadata mapping.
 
 ---
 
-## rriculum Breakdown
+## Curriculum Breakdown
 
 ### 31. ETL With Apache Spark – Overview (3 min)
 
-* **The Distributed Engine Standard**: Establishing how Apache Spark acts as a unified big data processing engine by breaking down data execution into parallel tasks across multiple worker nodes.
-* **The ETL Paradigm in Spark**:
-* **Extract**: Connecting natively to diverse file formats (JSON, Parquet, CSV), relational databases via JDBC, and message streams via Structured Streaming.
-* **Transform**: Leveraging the programmatic **DataFrame API** and optimized execution plans to execute distributed filters, multi-table joins, and complex matrix aggregations at scale.
-* **Load**: Writing highly compressed, transactional table records back to cheap storage formats for downstream business consumption.
+* **Distributed Compute Engine Mechanics**: Apache Spark operates as a distributed data processing engine that utilizes a Driver-Worker topology to parallelize transformations across memory and CPU cores on independent worker nodes.
+* **The Distributed ETL Lifecycle in Spark**:
+* **Extract**: Establishing native connectors to semi-structured/structured file formats (JSON, Parquet, CSV, ORC), relational databases via JDBC, and message buses via Spark Structured Streaming.
+* **Transform**: Executing lazy transformations using the **DataFrame API**, optimized by the Catalyst query optimizer and compiled into vectorized bytecode via Project Tungsten to minimize garbage collection overhead.
+* **Load**: Writing transactional, column-oriented file structures (Delta Lake) back to distributed cloud storage layers for downstream analytical consumption.
 
 
 
 ### 32. ETL Project Overview (5 min)
 
-* **The Medallion Framework Lifecycle**: Designing a multi-hop architecture to incrementally refine raw source files into high-value business assets:
-1. **Bronze Layer (Raw Storage)**: Appending ingestion sources exactly as they land from source systems, preserving the historical lineage of raw records.
-2. **Silver Layer (Cleansing & Conformance)**: De-duplicating records, stripping out null value constraints, enforcing schema validation, and flattening semi-structured JSON strings.
-3. **Gold Layer (Business Aggregates)**: Dropping record-level granularities to pre-compute high-level reporting aggregates and analytical dimensions optimized for BI dashboard consumption.
+* **Multi-Hop Medallion Architecture Implementation**: Incrementally structuring unstructured or semi-structured data assets across distinct logical validation layers:
+1. **Bronze Layer (Raw Append-Only Ingestion)**: Ingests raw source records preserving source fidelity and historical audit lineage without destructive schema enforcement.
+2. **Silver Layer (Cleansing, Conformance & Deduplication)**: Standardizes data types, deduplicates records via primary key constraints or window partitions, enforces structural nullability checks, and flattens nested JSON payloads into normalized tabular schemas.
+3. **Gold Layer (Aggregated Business Models)**: Pre-calculates high-performance analytical aggregates, fact-dimension models, and star schemas tailored for low-latency BI tools and downstream machine learning features.
 
 
 
 ### 33. Set-up Data Lake Project Environment (11 min)
 
-* **Cloud Storage Decoupling**: Setting up resilient cloud object container paths (e.g., AWS S3 Buckets or Azure ADLS Gen2 File Systems) to serve as your physical storage layer.
-* **Non-Interactive Access Controls**: Generating and binding **Service Principals**, managed identities, or IAM roles to establish programmatic authentication boundaries without exposing master cloud credentials.
-* **Spark Session Storage Keys**: Configuring custom Spark runtime attributes within your cluster configuration blocks to handle secure, bi-directional network communication with cloud endpoints.
+* **Cloud Storage Decoupling**: Establishing isolated storage containers (e.g., Azure Data Lake Storage Gen2 file systems via Hierarchical Namespace, AWS S3 buckets, or GCP Cloud Storage) to decouple persistent state from ephemeral compute nodes.
+* **Non-Interactive Service Principal Authentication**: Provisioning OAuth 2.0 applications, Azure Entra ID Service Principals, or cloud IAM roles to delegate read/write operations without embedding root account credentials in source scripts.
+* **Spark Session Storage Configuration**: Injecting target storage driver keys and tenant authorization properties directly into cluster-level Spark configurations (e.g., `spark.hadoop.fs.azure.account.auth.type` and OAuth endpoint URIs).
 
 ### 34. Set-up Unity Catalog Project Environment (17 min)
 
-* **The Metastore Root**: Mapping out the top-level container that binds all catalogs, storage paths, and security permissions across multiple distinct platform workspaces.
-* **The 3-Level Namespace Structure**: Enforcing enterprise data layout clarity by accessing and addressing metadata assets exclusively via the uniform hierarchy:
+* **Metastore Root Binding**: Configuring the centralized Unity Catalog metastore container that maps cross-workspace data governance policies, automated lineage capture, and centralized storage credentials.
+* **Three-Level Namespace Hierarchy**: Addressing data assets strictly through the standardized enterprise governance model:
 
 $$\text{Catalog} \longrightarrow \text{Schema (Database)} \longrightarrow \text{Table / View / Volume}$$
 
-* **Compute Access Modes**: Configuring cluster authorization requirements. Activating Unity Catalog data protection features (such as dynamic data masking and lineage tracking) requires spinning up clusters running on strict **Shared** (multi-user isolation) or **Single User** access modes.
+* **Cluster Compute Security Modes**: Enforcing cluster authorization boundaries. Enabling Unity Catalog governance features (such as row-level filtering, column masking, and end-to-end data lineage tracking) requires provisioning compute running in **Shared** (multi-tenant user isolation) or **Single User** access modes. Traditional "No Isolation Shared" compute modes are disabled for governed assets.
 
 ---
 
@@ -56,20 +56,20 @@ $$\text{Catalog} \longrightarrow \text{Schema (Database)} \longrightarrow \text{
 
 | Platform Component | Operational Role |
 | --- | --- |
-| **Apache Spark** | The distributed in-memory execution engine that processes tasks across the worker nodes. |
-| **Cloud Data Lake** | The physical object storage layer (S3, ADLS, GCS) that holds the data files safely at low cost. |
-| **Unity Catalog** | The global governance layer managing discovery permissions, lineage auditing, and column/row masking. |
-| **Delta Lake** | The file-based transactional storage format that introduces ACID safety boundaries to raw cloud data lakes. |
+| **Apache Spark** | Distributed, in-memory compute engine coordinating task execution across executor nodes. |
+| **Cloud Data Lake** | Distributed object store (ADLS Gen2, AWS S3, GCS) providing persistent, low-cost physical storage. |
+| **Unity Catalog** | Centralized governance layer managing unified access controls, data auditing, and multi-workspace metastores. |
+| **Delta Lake** | ACID transactional storage layer implementing transaction logging (`_delta_log`) and data versioning on top of Parquet files. |
 
 ---
 
 ## Technical Pre-Flight Checklist
 
-Before launching into the subsequent coding labs, verify that your active development space matches this baseline deployment setup:
+Verify the following deployment criteria prior to executing subsequent hands-on modules:
 
-1. **Storage Line-of-Sight**: Test that your cloud storage accounts permit write operations from external compute clients.
-2. **Unity Catalog Verification**: Ensure your targeted execution workspace is actively attached to an operational Unity Catalog metastore container.
-3. **Security Scoping**: Confirm your API registration tokens and workspace secret scopes are verified to allow non-interactive cluster resource deployment.
+1. **Storage Connectivity**: Validate write and delete permissions against target cloud storage containers via service credentials.
+2. **Metastore Association**: Verify that the execution workspace is bound to an active Unity Catalog metastore.
+3. **Secret Scope Isolation**: Ensure API tokens and database credentials are stored within configured Databricks Secret Scopes and referenced via `dbutils.secrets.get()` instead of hardcoded values.
 
 ---
 
