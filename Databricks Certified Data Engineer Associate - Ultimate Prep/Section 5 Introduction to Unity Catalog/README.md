@@ -1,6 +1,6 @@
 # Section 15: Lakeflow Spark Declarative Pipelines (SDP) — Project
 
-This section details the end-to-end engineering and architectural execution of **Lakeflow Spark Declarative Pipelines (SDP)** (formerly Delta Live Tables / DLT). Spanning 2 hours and 40 minutes of hands-on implementation, this module focuses on constructing an enterprise-grade Medallion architecture—progressing from raw multi-protocol ingestion to conformed Gold consumption layers while enforcing row-level data quality expectations, Change Data Capture (CDC) synchronization, and Unity Catalog multi-namespace governance.
+This section provides an end-to-end technical implementation guide for Lakeflow Spark Declarative Pipelines (SDP), formerly Delta Live Tables (DLT). The 2-hour and 40-minute module focuses on architecting an enterprise-grade Medallion pipeline, progressing from raw multi-protocol ingestion to conformed Gold layers while enforcing row-level data quality, Change Data Capture (CDC) synchronization, and Unity Catalog multi-namespace governance.
 
 Refer to `image_08e047.png` for the detailed project implementation flow and task dependencies.
 
@@ -39,23 +39,23 @@ Refer to `image_08e047.png` for the detailed project implementation flow and tas
 
 ### 1. Declarative Data Quality Enforcement (Expectations)
 
-Expectations integrate data quality validation directly into the pipeline execution graph without breaking the underlying Spark Structured Streaming query plan. Constraints are evaluated row-by-row with three distinct operational enforcement actions:
+Expectations integrate data quality validation directly into the pipeline execution graph without breaking the underlying Spark Structured Streaming query plan. Constraints evaluate row-by-row with three operational enforcement actions:
 
-* **`ON VIOLATION ALLOW` (Audit & Retain)**: Logs constraint violation metrics directly to the system event log while allowing non-compliant records to proceed downstream for auditing.
+* **`ON VIOLATION ALLOW` (Audit & Retain):** Logs constraint violation metrics directly to the system event log while allowing non-compliant records to proceed downstream for auditing.
 ```sql
 CONSTRAINT valid_timestamp EXPECT (event_timestamp <= current_timestamp()) ON VIOLATION ALLOW
 
 ```
 
 
-* **`ON VIOLATION DROP` (Filter & Discard)**: Atomically drops rows that fail the boolean predicate before they are committed to destination Delta storage, preventing downstream dataset corruption.
+* **`ON VIOLATION DROP` (Filter & Discard):** Atomically drops rows that fail the boolean predicate before they are committed to destination Delta storage, preventing downstream dataset corruption.
 ```sql
 CONSTRAINT positive_price EXPECT (unit_price > 0) ON VIOLATION DROP
 
 ```
 
 
-* **`ON VIOLATION FAIL` (Abort Transaction)**: Halts pipeline execution immediately and returns a critical execution exception if any row violates the defined business rule.
+* **`ON VIOLATION FAIL` (Abort Transaction):** Halts pipeline execution immediately and returns a critical execution exception if any row violates the defined business rule.
 ```sql
 CONSTRAINT valid_id EXPECT (order_id IS NOT NULL) ON VIOLATION FAIL
 
@@ -65,9 +65,9 @@ CONSTRAINT valid_id EXPECT (order_id IS NOT NULL) ON VIOLATION FAIL
 
 ### 2. Change Data Capture via `APPLY CHANGES INTO`
 
-The declarative `APPLY CHANGES INTO` abstraction eliminates the need to construct and tune manual `MERGE INTO` operations, automatically managing out-of-order records, late-arriving events, and schema synchronization:
+The declarative `APPLY CHANGES INTO` abstraction eliminates manual `MERGE INTO` tuning, automatically managing out-of-order records, late-arriving events, and schema synchronization:
 
-* **SCD Type 1 (Deterministic Overwrite)**: Maintains the current record state by overwriting existing target rows matching the specified `KEYS` using `SEQUENCE BY` column ordering.
+* **SCD Type 1 (Deterministic Overwrite):** Maintains the current record state by overwriting existing target rows matching the specified `KEYS` using `SEQUENCE BY` column ordering.
 ```sql
 APPLY CHANGES INTO live.dim_customers
 FROM stream(live.stage_customers)
@@ -79,7 +79,7 @@ COLUMNS * EXCEPT (operation);
 ```
 
 
-* **SCD Type 2 (Historical Dimension Tracking)**: Preserves historical state intervals across changes, automatically generating and maintaining metadata tracking columns (`__START_AT`, `__END_AT`) and populating `__END_AT = NULL` for the active record version.
+* **SCD Type 2 (Historical Dimension Tracking):** Preserves historical state intervals across changes, automatically generating metadata tracking columns (`__START_AT`, `__END_AT`) and populating `__END_AT = NULL` for the active record version.
 ```python
 import dlt
 
@@ -98,16 +98,16 @@ dlt.apply_changes(
 
 ### 3. Streaming Tables vs. Materialized Views
 
-* **Streaming Tables (`STREAMING TABLE`)**: Backed by the Spark Structured Streaming engine and dedicated state checkpoint directories. They process append-only, high-throughput source streams incrementally, ensuring each record or raw storage object is evaluated exactly once.
-* **Materialized Views (`MATERIALIZED VIEW`)**: Maintain pre-computed query states over upstream transactional tables or historical data stores. The incremental computation engine processes only the net delta changes from source tables during each refresh cycle, reducing latency and query compute costs for downstream BI consumers.
+* **Streaming Tables (`STREAMING TABLE`):** Backed by the Spark Structured Streaming engine and dedicated state checkpoint directories. These process append-only, high-throughput source streams incrementally, ensuring each record or raw storage object is evaluated exactly once.
+* **Materialized Views (`MATERIALIZED VIEW`):** Maintain pre-computed query states over upstream transactional tables or historical data stores. The incremental computation engine processes only the net delta changes from source tables during each refresh cycle, reducing latency and query compute costs for downstream BI consumers.
 
 ---
 
 ## Important Exam Considerations
 
-* **Polyglot Pipeline Homogeneity Rule**: While a single Lakeflow Declarative Pipeline DAG can coordinate tasks across both SQL and Python source files, **individual source files must be homogeneous**. Embedding Python cells within a SQL notebook (or `%sql` within Python modules) inside a declarative pipeline triggers a compilation failure.
-* **Target Catalog Routing**: Pipelines governed by Unity Catalog support direct output routing to explicit 3-tier namespaces (`catalog.schema.table`), allowing developers to deploy Bronze, Silver, and Gold objects to separate physical storage containers and access tiers from a single pipeline definition.
-* **DLT Event Log Telemetry**: Platform metrics, runtime graph dependencies, cluster configurations, and data quality pass/drop metrics are continuously written to an internal Delta table (the DLT Event Log). This log can be queried directly via Spark SQL to audit historical pipeline run durations, expectation drop ratios, and failure root causes.
+* **Polyglot Pipeline Homogeneity Rule:** While a single Lakeflow Declarative Pipeline DAG can coordinate tasks across both SQL and Python source files, individual source files must be homogeneous. Embedding Python cells within a SQL notebook (or `%sql` within Python modules) inside a declarative pipeline triggers a compilation failure.
+* **Target Catalog Routing:** Pipelines governed by Unity Catalog support direct output routing to explicit 3-tier namespaces (`catalog.schema.table`), allowing developers to deploy Bronze, Silver, and Gold objects to separate physical storage containers and access tiers from a single pipeline definition.
+* **DLT Event Log Telemetry:** Platform metrics, runtime graph dependencies, cluster configurations, and data quality pass/drop metrics write continuously to an internal Delta table (the DLT Event Log). This log can be queried directly via Spark SQL to audit historical pipeline run durations, expectation drop ratios, and failure root causes.
 
 ---
 
