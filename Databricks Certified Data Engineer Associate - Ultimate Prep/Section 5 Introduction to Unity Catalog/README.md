@@ -112,3 +112,4 @@ dlt.apply_changes(
 ---
 
 [← Back to Section 14: Lakeflow Declarative Pipelines Overview](https://www.google.com/search?q=./section14-readme.md) | [Next Section: Section 16: Lakeflow Jobs & Workflow Orchestration →](https://www.google.com/search?q=./section16-readme.md)
+](https://www.faymyers.com/)
