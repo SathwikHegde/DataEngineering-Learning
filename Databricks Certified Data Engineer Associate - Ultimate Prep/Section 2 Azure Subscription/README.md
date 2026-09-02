@@ -1,6 +1,6 @@
 # Section 2: Azure Subscription Setup & Environment Preparation
 
-This section establishes the foundational cloud infrastructure required to host enterprise-grade Databricks workspaces. Because Azure Databricks operates as a first-party, managed Software-as-a-Service (SaaS) and Platform-as-a-Service (PaaS) offering deeply integrated with Microsoft Azure, configuring a compliant subscription, identity perimeter, and resource hierarchy is the critical prerequisite prior to provisioning compute planes, Delta storage lakes, and Unity Catalog metastores.
+This section establishes the foundational cloud infrastructure required to deploy enterprise-grade Databricks workspaces. Because Azure Databricks operates as a first-party, managed Platform-as-a-Service (PaaS) deeply integrated into the Microsoft Azure ecosystem, configuring a compliant subscription, identity perimeter, and resource hierarchy is the strict prerequisite prior to provisioning compute planes, Delta Lake storage, and Unity Catalog metastores.
 
 Review your course dashboard to access the video lectures and synchronized walkthroughs for this section.
 
@@ -18,29 +18,29 @@ Review your course dashboard to access the video lectures and synchronized walkt
 
 ### 1. Registering an Azure Free Account (6 min)
 
-* **Cloud Sandbox Provisioning**: Step-by-step walkthrough of creating an isolated Azure Entra ID (formerly Azure Active Directory) tenant and associated root subscription. The sandbox includes:
-* **$200 Evaluation Credit**: A 30-day initial credit allocation enabling risk-free provisioning of compute clusters, storage accounts, and networking infrastructure.
+* **Cloud Sandbox Provisioning**: Step-by-step execution of creating an isolated Azure Entra ID (formerly Azure Active Directory) tenant and associated root subscription. The sandbox includes:
+* **$200 Evaluation Credit**: A 30-day initial credit allocation enabling risk-free deployment of compute clusters, storage accounts, and networking infrastructure.
 * **12 Months of Tier-1 Services**: Extended allowances for core infrastructure components, including Linux/Windows compute instances, managed SQL databases, and standard object storage tiers.
 * **Always-Free Tier Capacities**: Permanent baseline access to serverless components, such as Azure Functions, Event Grid subscriptions, and Cosmos DB throughput tiers.
 
 
-* **Identity and Tenant Hierarchy**: Understanding how an Azure Subscription sits within a root Entra ID tenant, establishing the security perimeter where Role-Based Access Control (RBAC) and OAuth authorization tokens operate during workspace and storage integration.
+* **Identity and Tenant Hierarchy**: Establishing the security perimeter where Role-Based Access Control (RBAC) and OAuth 2.0 authorization tokens operate during workspace and storage integration.
 
 ### 2. Navigating the Azure Portal & Resource Organization (4 min)
 
-* **Azure Resource Manager (ARM) Architecture**: Navigating the unified management layer used to create, update, and delete cloud resources declaratively and imperatively across regions.
+* **Azure Resource Manager (ARM) Architecture**: Utilizing the unified management layer to create, update, and delete cloud resources declaratively and imperatively across regions.
 * **Resource Group Boundary Isolation**:
 * Implementing structured Resource Groups (e.g., `rg-databricks-dev-eastus-001`) to serve as logical management containers for all project-related assets.
 * Leveraging Resource Groups to enforce unified lifecycle policies, regional data residency boundaries, and localized RBAC role assignments (`Contributor`, `Owner`, `Reader`).
 
 
 * **Core Data Engineering Service Discovery**:
-* **Azure Databricks Workspaces**: Locating and registering the `Microsoft.Databricks` resource provider to enable control plane and data plane deployment.
-* **Azure Data Lake Storage Gen2 (ADLS Gen2)**: Identifying hierarchical namespace (HNS) enabled storage accounts (`Microsoft.Storage`) necessary for hosting Delta Lake table structures and Unity Catalog external storage roots.
+* **Azure Databricks Workspaces**: Registering the `Microsoft.Databricks` resource provider to enable control plane and data plane deployment via the ARM API.
+* **Azure Data Lake Storage Gen2 (ADLS Gen2)**: Provisioning hierarchical namespace (HNS) enabled storage accounts (`Microsoft.Storage`) necessary for hosting Delta Lake table structures and Unity Catalog external storage roots.
 
 
 * **Cost Management, Budgets, and Automated Alerts**:
-* Configuring proactive cost boundaries within **Azure Cost Management + Billing**.
+* Configuring proactive cost boundaries within Azure Cost Management + Billing.
 * Creating metric-driven budget alert thresholds (e.g., 50%, 75%, and 90% of total allocated credit) with automated email and webhook notifications to prevent runaway compute costs or unmonitored cluster idle times.
 
 
