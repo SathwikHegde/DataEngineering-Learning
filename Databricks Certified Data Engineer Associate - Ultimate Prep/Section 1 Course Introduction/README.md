@@ -1,69 +1,64 @@
 # Databricks Certified Data Engineer Associate — Ultimate Prep
 
-Welcome to the **Databricks Certified Data Engineer Associate** preparation repository! This guide is structured around the comprehensive 20-hour certification course curriculum to help you master the Databricks Data Intelligence Platform and pass the associate-level examination with confidence.
+This repository provides the core curriculum blueprint and technical reference architecture for the **Databricks Certified Data Engineer Associate** certification track. Designed around the official exam objectives, this material covers distributed computing internals, Unity Catalog metadata governance, production-grade Medallion ETL patterns, and automated DevOps lifecycle management on the Databricks Data Intelligence Platform.
 
 ---
 
 ## Course at a Glance
 
-* **Total Content:** 20 Hours of HD Video Modules
-* **Learners Enrolled:** 25,500+
-* **Average Rating:** 4.7 / 5.0
-* **Primary Focus:** Production-grade ETL, Unity Catalog Governance, and Medallion Architecture.
+* **Curriculum Scope:** 20 Hours of Technical Blueprint Modules
+* **Primary Focus:** Distributed ETL Optimization, ACID Storage Mechanics, Lakeflow Declarative Pipelines, and Unity Catalog Data Governance.
+* **Target Credentials:** Databricks Certified Data Engineer Associate
 
 ---
 
 ## Section 1: Course Introduction & Setup
 
-This section focuses on preparing your local and cloud environment, gathering resource materials, and establishing your learning strategy before jumping into hands-on pipeline engineering.
+This initial module establishes the technical baseline, workspace configuration criteria, and resource architecture required prior to staging production data engineering pipelines.
 
-| Lesson # | Module | Duration | Description |
+| Module | Title | Duration | Technical Scope |
 | --- | --- | --- | --- |
-| **1** | **Course Disclaimer** | 1 min | Essential context regarding exam versioning, DBU usage, and lab cost optimization. |
-| **2** | **Course Introduction** | 4 min | High-level overview of the modern Databricks Lakehouse ecosystem. |
-| **3** | **Course Structure** | 4 min | Detailed breakdown of the learning path and official exam domain weightings. |
-| **4** | **Slides Download** | 1 min | **[Resource]** Download 320+ architectural blueprint PDF slides covering theoretical foundations. |
-| **5** | **Notebooks Download** | 1 min | **[Resource]** Download `.dbc` or `.ipynb` workspace archives for hands-on lab exercises. |
-| **6** | **Data Download** | 1 min | **[Resource]** Raw e-commerce and telemetry datasets required for the Medallion ETL pipelines. |
+| **1** | **Course Disclaimer** | 1 min | Exam syllabus alignment, DBU billing parameters, and cloud provider cost guardrails. |
+| **2** | **Course Introduction** | 4 min | Systems-level architecture overview of the Databricks Lakehouse framework. |
+| **3** | **Course Structure** | 4 min | Certification domain weight mapping and hands-on laboratory sequencing. |
+| **4** | **Slides Download** | 1 min | Architectural reference diagrams and execution flow blueprints (PDF format). |
+| **5** | **Notebooks Download** | 1 min | Programmatic source code artifacts (`.dbc` and `.ipynb` archives) for pipeline staging. |
+| **6** | **Data Download** | 1 min | Multi-format source datasets (JSON, CSV, TSV, Parquet) for Medallion ETL labs. |
 
 ---
 
-## What You'll Learn
+## Technical Core Competencies
 
-The curriculum is engineered to take you from core Spark mechanics to deploying scalable, enterprise-grade production pipelines.
+The curriculum develops practical competencies across core distributed engineering domains:
 
-### Core Architecture
+### 1. Storage Layer & Governance Architecture
 
-* **Medallion Architecture:** Constructing clean, scalable multi-hop data streams across Bronze (raw landing), Silver (cleansed/conformed), and Gold (business analytics) layers.
-* **Delta Lake Mechanics:** Deep dive into ACID transaction logs (`_delta_log`), time travel audit trails, Liquid Clustering (`CLUSTER BY`), and automated compaction routines (`OPTIMIZE` / `VACUUM`).
-* **Unity Catalog Governance:** Managing centralized 3-tier namespaces (`Catalog` $\rightarrow$ `Schema` $\rightarrow$ `Asset`), lineage graphs, Storage Credentials, External Locations, and fine-grained access control (Row Filters & Column Masks).
+* **The Medallion Framework:** Designing multi-hop streaming and batch architectures across raw ingestion (Bronze), cleansed relational structures (Silver), and consumption-ready dimensional aggregates (Gold).
+* **Delta Lake Protocols:** Underlying transaction log serialization (`_delta_log`), deterministic snapshot isolation, Time Travel state recovery, multi-dimensional clustering via Liquid Clustering (`CLUSTER BY`), and physical storage lifecycle management (`OPTIMIZE`, `VACUUM`).
+* **Unity Catalog Governance:** Managing unified three-tier namespace taxonomies (`catalog.schema.table`), fine-grained Role-Based Access Control (RBAC), programmatic Row Filters, Column Masks, automated column-level lineage graphs, and External Location storage credentials.
 
-### Data Engineering Workflows
+### 2. Distributed Data Processing & Streaming
 
-* **PySpark & Spark SQL:** Programmatically extracting, reshaping, and enriching structured and semi-structured datasets using native functions and higher-order expressions.
-* **Incremental Data Ingestion:** Implementing **Auto Loader** (`cloudFiles`) and **Lakeflow Connect** for scalable, continuous schema-aware ingestion from cloud object storage.
-* **Streaming Engine Mechanics:** Processing real-time streaming feeds using **Spark Structured Streaming** and **Lakeflow Spark Declarative Pipelines (DLT)** with inline quality Expectations.
+* **Engine Optimization:** Writing optimized PySpark DataFrame transformations and Spark SQL expressions leveraging Catalyst physical plan generation and Tungsten memory management.
+* **Incremental Ingestion:** Implementing scalable ingestion pipelines using **Auto Loader** (`cloudFiles`) with dynamic schema inference, schema evolution tracking, and notification queue protocols.
+* **Stream Processing:** Deploying low-latency stateful stream topologies using **Spark Structured Streaming** and **Lakeflow Spark Declarative Pipelines (SDP / DLT)** with declarative data quality Expectations (`ALLOW`, `DROP`, `FAIL`).
 
-### Operations & CI/CD DevOps
+### 3. Workflow Orchestration & DevOps Lifecycle
 
-* **Orchestration with Lakeflow Jobs:** Building, scheduling, and monitoring complex multi-task DAG workflows with automated retry policies and notification triggers.
-* **Databricks Git Integration:** Syncing workspace code seamlessly with enterprise Git providers (GitHub, GitLab, Azure DevOps) for collaborative development.
-* **Databricks Asset Bundles (DABs):** Declaratively declaring workspace resources, compute targets, and job definitions using YAML configuration templates for automated CI/CD deployments.
-
----
-
-## Getting Started
-
-To get the most out of this preparation material, follow these pre-flight steps:
-
-1. **Download Resource Packages:** Grab the PDF Slides, PySpark/SQL Notebooks, and sample Data files via the links provided in Section 1.
-2. **Provision Your Workspace:** Ensure you have access to an active Databricks workspace deployed on AWS, Azure, GCP, or Community Edition.
-3. **Import Notebook Archives:** Upload the `.dbc` archive into your workspace **Workspace/Users** folder.
-4. **Follow the Curriculum:** Review the architectural blueprint slides alongside each hands-on module to solidify your mental model for exam day.
+* **Lakeflow Jobs:** Configuring Directed Acyclic Graphs (DAGs), conditional task execution topologies (`Run If`), upstream parameter propagation (`taskValues`), and automated failure recovery routines.
+* **Databricks Git Folders:** Multi-branch lifecycle management, branch checkout protocols, and workspace Git provider integration.
+* **Databricks Automation Bundles (DABs):** Declarative Infrastructure-as-Code (IaC) packaging defining compute configurations, workflows, and pipelines within a version-controlled `databricks.yml` manifest for automated CI/CD runners.
 
 ---
 
-> **Note:** This repository is intended as an educational companion to supplement your study plan. Always consult the official Databricks Certification Guide to confirm current exam blueprint domain weights and testing policies.
+## Pre-Flight Verification & Workspace Setup
+
+Complete the following configuration checklist prior to launching subsequent development modules:
+
+1. **Staging Resource Artifacts:** Extract the provided `.dbc` archive and import the assets directly into your target workspace under `/Workspace/Users/<user-email>/`.
+2. **Compute Environment Access:** Validate that you have access to deploy clusters running Databricks Runtime (DBR) with either **Shared** or **Single User** compute access modes to enforce Unity Catalog compatibility.
+3. **Storage Container Permissions:** Verify network connectivity and IAM/service principal delegations to cloud object storage containers (Azure ADLS Gen2, AWS S3, or Google Cloud Storage).
+4. **Credential Scoping:** Confirm that sensitive target strings (database credentials, cloud storage keys) are registered inside Databricks Secret Scopes rather than plain-text script entries.
 
 ---
 
