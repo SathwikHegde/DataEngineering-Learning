@@ -1,8 +1,8 @@
 # Section 9: Apache Spark — Querying Data (PySpark)
 
-This module details programmatic data extraction, storage plane decoupling, and distributed execution mechanics utilizing the PySpark DataFrame API. Within distributed Lakehouse architectures, PySpark operates as the primary orchestration interface for production ETL Directed Acyclic Graphs (DAGs). It achieves JVM-native execution latency by compiling logical query plans via the Catalyst Optimizer and executing them through the Project Tungsten engine for vectorized, off-heap memory management.
+This section analyzes programmatic data extraction, storage layer decoupling, and distributed execution topologies utilizing the PySpark DataFrame API. As the primary orchestration interface for production ETL Directed Acyclic Graphs (DAGs) within Lakehouse architectures, PySpark delivers JVM-native execution latency. This is achieved by compiling logical query plans through the Catalyst Optimizer and executing vectorized, off-heap memory operations via the Project Tungsten engine.
 
-Refer to `image_66d9bb.png` for the execution timeline and dependency sequence.
+Refer to `image_66d9bb.png` for the execution timeline and topological dependency sequence.
 
 ---
 
@@ -10,7 +10,7 @@ Refer to `image_66d9bb.png` for the execution timeline and dependency sequence.
 
 * **Total Duration:** 46 minutes
 * **Total Lessons:** 7
-* **Primary Focus:** Distributed driver-executor node topologies, Spark Connect gRPC abstraction, strict struct schema bindings, and partitioned JDBC extraction parallelism.
+* **Primary Focus:** Distributed driver-executor node topologies, Spark Connect gRPC abstraction, explicit struct schema bindings, and partitioned JDBC extraction parallelism.
 
 ---
 
@@ -18,13 +18,13 @@ Refer to `image_66d9bb.png` for the execution timeline and dependency sequence.
 
 ### 60. Introduction to PySpark (3 min)
 
-* **Spark Connect Architecture**: Modern runtimes decouple client REPL sessions from the Spark driver via the Spark Connect client-server protocol. Programmatic DataFrame commands compile into lightweight, language-agnostic unresolved logical plans and transmit via gRPC to the remote driver, eliminating local Java Virtual Machine (JVM) dependencies and Py4J serialization overhead.
-* **Lazy Evaluation**: Pipeline execution is strictly bifurcated into **Transformations** (constructing a logical DAG lineage without initiating storage I/O) and **Actions** (triggering Catalyst optimization, compiling physical Tungsten bytecode, and materializing output states to the storage plane).
+* **Spark Connect Architecture**: Modern Databricks runtimes abstract client REPL sessions from the Spark driver via the Spark Connect client-server protocol. Programmatic DataFrame instructions compile into lightweight, language-agnostic unresolved logical plans and transmit via gRPC to the remote driver, eliminating local Java Virtual Machine (JVM) dependencies and Py4J serialization overhead.
+* **Lazy Evaluation**: Pipeline execution is strictly bifurcated into **Transformations** (constructing a logical DAG lineage without initiating storage I/O) and **Actions** (triggering Catalyst optimization, compiling physical Tungsten bytecode, and materializing output states to the distributed storage plane).
 * **DataFrame Abstraction**: Deprecates legacy Resilient Distributed Datasets (RDDs) in favor of strictly typed DataFrames. This architecture enforces Whole-Stage Code Generation (WSCG), allowing the engine to apply relational optimizations across the Abstract Syntax Tree (AST) irrespective of the host programming language.
 
 ### 61. Extract Customers Data — Simple JSON (17 min)
 
-* **Strict Schema Definition**: Production workloads mandate explicit `StructType` models over dynamic schema inference (`inferSchema`). Explicit declaration bypasses the high-latency, multi-pass I/O scan required to infer metadata across cloud object storage and immunizes downstream processing against structural data drift.
+* **Strict Schema Definition**: Production pipelines require explicit `StructType` declarations to supersede dynamic `inferSchema` evaluations. Explicit declaration circumvents the high-latency, multi-pass I/O scans required to infer metadata across cloud object storage and immunizes downstream processing against structural data drift.
 * **Code Implementation Pattern**:
 
 ```python
@@ -45,8 +45,8 @@ df_customers = (spark.read
 
 ### 62. Extract Orders Data — Complex JSON as Text (5 min)
 
-* **Semi-Structured Parsing**: Direct string indexing and regex operations on nested JSON payloads introduce severe JVM CPU overhead. Binding raw string columns to an explicit `from_json()` schema expression evaluates nested elements inline, bypassing expensive string manipulation and minimizing the garbage collection footprint.
-* **Relational Normalization**: Utilizing the `explode()` generator transposes nested arrays into independent vertical records. This is combined with struct dot notation (`orders.items`) to un-nest complex hierarchical maps into normalized, First Normal Form (1NF) tabular schemas.
+* **Semi-Structured Parsing**: Executing direct string indexing or regex on nested JSON payloads incurs substantial JVM CPU penalties. Binding raw string columns to an explicit `from_json()` schema expression evaluates nested elements inline, circumventing expensive string manipulation and minimizing the garbage collection footprint.
+* **Relational Normalization**: Utilizing the `explode()` generator transposes nested arrays into independent vertical records. Combining this with struct dot notation (`orders.items`) un-nests complex hierarchical maps into normalized, First Normal Form (1NF) tabular schemas.
 
 ### 63. Extract Memberships Data — Binary File (4 min)
 
@@ -96,4 +96,4 @@ df_refunds = (spark.read
 
 ---
 
-[← Back to Section 8: Apache Spark — Transforming Data (SQL)](https://www.google.com/search?q=./section08-readme.md) | [Next Section: Section 10: Advanced Transformations & Complex Data Structures →](https://www.google.com/search?q=./section10-readme.md)
+[← Back to Section 8: Apache Spark — Transforming Data (SQL)](https://www.google.com/search?q=./section08-readme.md&utm_source=gemini) | [Next Section: Section 10: Advanced Transformations & Complex Data Structures →](https://www.google.com/search?q=./section10-readme.md&utm_source=gemini)
