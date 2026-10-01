@@ -1,53 +1,54 @@
 # Section 14: Lakeflow Declarative Pipelines (DLT) — Overview
 
-This section introduces **Delta Live Tables (DLT)** within the unified **Lakeflow** framework. DLT completely shifts the ETL development paradigm from imperative coding (where you manually manage Spark streams, storage checkpoints, and state recovery retries) to a highly reliable **declarative framework**. Developers simply define the desired data states and data quality bounds, leaving the underlying execution engine to automatically orchestrate the compute infrastructure, manage complex dataset dependencies, and enforce structural lineage.
+This module introduces **Delta Live Tables (DLT)** within the unified Lakeflow architecture. DLT executes a paradigm shift from imperative pipeline engineering—which necessitates manual orchestration of Structured Streaming offsets, checkpoint states, and retry heuristics—to a highly resilient declarative framework. Data engineers define target end-states and data quality invariants, abstracting the underlying execution engine to autonomously orchestrate compute infrastructure, resolve Directed Acyclic Graph (DAG) dependencies, and enforce deterministic structural lineage.
 
-Refer to `image_628c04.png` for the lesson timeline and structure of this introductory module.
+Refer to `image_628c04.png` for the topological dependency graph and curriculum sequencing.
 
 ---
 
 ## Section Overview
 
 * **Total Duration:** 20 minutes
-* **Total Lessons:** 3
-* **Primary Focus:** Declarative ETL foundations, automated DAG graph synthesis, and basic multi-language DLT syntax patterns.
+* **Total Modules:** 3
+* **Primary Focus:** Declarative ETL semantics, automated DAG synthesis, stateful stream processing, and polyglot DLT runtime syntax.
 
 ---
 
 ## Curriculum Breakdown
 
-| Lesson # | Title | Duration | Core Learning Outcome |
+| Module # | Title | Duration | Core Architectural Outcome |
 | --- | --- | --- | --- |
-| **100** | **Introduction to Delta Live Tables** | 8 min | Understanding the cost and operational benefits of declarative engineering over manual Spark streaming pipelines. |
-| **101** | **DLT Architecture** | 4 min | How Databricks parses source files to build visual execution graphs and handle elastic autoscaling profiles. |
-| **102** | **Programming with DLT** | 9 min | Introductory code structures using both SQL text and PySpark decorative wrappers. |
+| **100** | **Introduction to Delta Live Tables** | 8 min | Analyzing the FinOps and operational efficiency of declarative engineering versus imperative Spark Structured Streaming pipelines. |
+| **101** | **DLT Architecture** | 4 min | Examining how the Lakeflow engine parses abstract syntax trees (AST) to synthesize visual DAGs and provision elastic autoscaling compute. |
+| **102** | **Programming with DLT** | 9 min | Defining foundational code topologies utilizing ANSI SQL and native PySpark declarative decorators. |
 
 ---
 
 ## Core Architectural Concepts
 
-### 1. Declarative vs. Imperative Execution
+### 1. Declarative vs. Imperative Execution Semantics
 
-In a legacy, imperative PySpark streaming job, you must write explicit, operational micro-batch mechanics for parameters like `.readStream`, `.writeStream`, `.option("checkpointLocation", path)`, and transaction triggers.
+In legacy imperative topologies, engineers must explicitly program micro-batch mechanics (`.readStream`, `.writeStream`, `.option("checkpointLocation", path)`) and manage transaction triggers. With Lakeflow Declarative Pipelines, this operational overhead is completely abstracted. The runtime compiler inspects the execution scripts, infers dataset topological relationships based on declarative references, and autonomously synthesizes an optimized end-to-end physical execution DAG.
 
-With **Lakeflow Declarative Pipelines (DLT)**, you shift focus entirely to the end state. The underlying compiler inspects your complete code notebooks, infers the relationships between separate datasets based on queries, and auto-synthesizes an end-to-end processing execution graph (DAG).
+### 2. Polyglot Runtime Syntax
 
-### 2. Polyglot DLT Programming Syntax
+DLT natively supports both declarative ANSI SQL and Python. While multi-language execution graphs are fully supported within a unified pipeline environment, strict file-level language isolation is mandated.
 
-DLT supports both ANSI SQL and Python natively. While you can connect SQL and Python files within the same overall pipeline execution graph, you must isolate the languages to distinct, dedicated files.
+* **SQL Implementation Pattern:**
 
-* **SQL Pattern:**
 ```sql
--- Declaring an incremental ingest table using Auto Loader natively
+-- Declaring a stateful incremental ingestion table utilizing Auto Loader natively
 CREATE OR REFRESH STREAMING LIVE TABLE bronze_customers
 AS SELECT * FROM cloud_files("abfss://raw-zone@storageaccount.dfs.core.windows.net/customers", "json");
 
 ```
-* **Python Pattern:**
+
+* **Python Implementation Pattern:**
+
 ```python
 import dlt
 
-# Decorating a Python function to register a managed pipeline table
+# Decorating a Python function to register a managed pipeline node
 @dlt.table(name="bronze_customers")
 def bronze_customers():
     return (spark.readStream
@@ -56,23 +57,24 @@ def bronze_customers():
         .load("abfss://raw-zone@storageaccount.dfs.core.windows.net/customers"))
 
 ```
-### 3. Object Classifications Inside the Graph
 
-* **Streaming Live Tables (`STREAMING LIVE TABLE`)**: Optimized for append-only, high-velocity streams. They statefully check historical logs to process *only* files or messages that have arrived since the previous pipeline refresh.
-* **Materialized Views / Live Tables (`LIVE TABLE`)**: Traditional batch datasets that re-compute complicated queries, analytical window functions, and business aggregations completely from scratch during each execution step.
+### 3. Object State Classifications
+
+* **Streaming Live Tables (`STREAMING LIVE TABLE`)**: Optimized for stateful, append-only ingestion topologies. The engine tracks high-water marks within the transaction log to process exclusively novel micro-batches materialized since the preceding pipeline execution.
+* **Materialized Views / Live Tables (`LIVE TABLE`)**: Traditional batch assets that execute full table scans to recompute complex aggregations, analytical window functions, and unified business logic from scratch during each pipeline invocation.
 
 ---
 
 ## Important Exam Considerations
 
-* **The Non-Interactive Execution Constraint**: For the certification exam, remember that you **cannot** execute DLT notebooks cell-by-cell inside an interactive workspace cluster. Attempting to run a cell containing DLT code will throw an error. The source code must be linked directly to an active **Pipeline Deployment** inside the Workflows persona interface.
-* **The Syntax of Data Quality Guardrails**: Pay close attention to the structural definition of *Expectations* for data quality enforcement. DLT evaluates records using clean constraints:
-* `ON VIOLATION ALLOW`: Logs data exceptions transparently in the background telemetry but passes rows onward.
-* `ON VIOLATION DROP`: Filters bad rows out of the stream silently before they land in target storage.
-* `ON VIOLATION FAIL`: Crashes the entire active pipeline run immediately when a critical data anomaly is detected.
+* **Non-Interactive Compilation Constraint**: Certification scenarios rigorously test the execution boundaries of DLT. DLT scripts **cannot** be executed imperatively cell-by-cell within an interactive REPL workspace cluster. Attempting to do so yields a runtime exception. DLT code must be compiled and executed exclusively via an active Pipeline Deployment within the Lakeflow control plane.
+* **Data Quality Guardrails (Expectations)**: DLT enforces data integrity via declarative Expectations evaluated natively during execution. You must understand the distinct routing behaviors:
+* `ON VIOLATION ALLOW`: Logs constraint violations transparently to the event telemetry log while permitting anomalous records to propagate downstream.
+* `ON VIOLATION DROP`: Silently filters anomalous records from the micro-batch prior to materialization in the target Delta table.
+* `ON VIOLATION FAIL`: Instantly aborts the active pipeline DAG upon anomaly detection, preventing downstream data contamination.
 
 
-* **Automatic Lineage Generation**: Because the Lakeflow compilation layer evaluates all tables via explicit relationship mappings (`LIVE.<table_name>`), schema lineage dependencies are tracked natively down to individual table and column levels and rendered directly in the pipeline UI.
+* **Deterministic Lineage Generation**: By enforcing explicit dataset dependency mappings (via `LIVE.<table_name>` namespace references), the Lakeflow compiler natively captures and visualizes schema dependencies down to the granular column level without requiring manual instrumentation.
 
 ---
 
