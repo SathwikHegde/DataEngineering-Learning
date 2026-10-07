@@ -1,8 +1,8 @@
 # Section 9: Apache Spark — Querying Data (PySpark)
 
-This section delineates the programmatic ingestion architectures, storage plane abstractions, and distributed execution mechanics native to the PySpark DataFrame API. Acting as the primary declarative interface for enterprise ETL Directed Acyclic Graphs (DAGs) within Lakehouse environments, PySpark realizes JVM-native execution speeds. It achieves this performance benchmark by resolving logical query plans through the Catalyst Optimizer and offloading vectorized, off-heap memory computations to the Project Tungsten physical execution engine.
+This module breaks down programmatic data ingestion, storage abstraction, and distributed execution mechanics utilizing the PySpark DataFrame API. Serving as the primary orchestration layer for production Lakehouse Directed Acyclic Graphs (DAGs), PySpark achieves JVM-native processing speeds. It accomplishes this by passing logical query plans to the Catalyst Optimizer and executing vectorized, off-heap memory operations via the Project Tungsten engine.
 
-Refer to `image_66d9bb.png` for the topological dependency graph and execution sequencing.
+Refer to `image_66d9bb.png` for the execution sequence and topological dependency graph.
 
 ---
 
@@ -10,7 +10,7 @@ Refer to `image_66d9bb.png` for the topological dependency graph and execution s
 
 * **Total Duration:** 46 minutes
 * **Total Modules:** 7
-* **Primary Focus:** Distributed driver-executor node topologies, Spark Connect gRPC abstraction, deterministic `StructType` schema enforcements, and partitioned JDBC extraction concurrency.
+* **Primary Focus:** Spark Connect gRPC architecture, driver-executor topologies, explicit `StructType` schema bindings, and concurrent JDBC extraction.
 
 ---
 
@@ -18,13 +18,13 @@ Refer to `image_66d9bb.png` for the topological dependency graph and execution s
 
 ### 60. Introduction to PySpark (3 min)
 
-* **Spark Connect Architecture**: Modern Databricks architectures decouple the client REPL interface from the Spark driver via the Spark Connect gRPC protocol. Programmatic DataFrame instructions are compiled into lightweight, language-agnostic unresolved logical plans and transmitted to the remote driver, thereby circumventing local Java Virtual Machine (JVM) initialization and eliminating Py4J IPC serialization latency.
-* **Lazy Evaluation Semantics**: Pipeline execution relies on strict bifurcation: **Transformations** (which generate a logical DAG lineage without invoking storage I/O) and **Actions** (which force Catalyst compilation, yield physical Tungsten bytecode, and materialize state to the distributed object store).
-* **DataFrame Abstraction Layer**: Supersedes legacy Resilient Distributed Datasets (RDDs) by enforcing strictly typed DataFrames. This construct leverages Whole-Stage Code Generation (WSCG), permitting the execution engine to execute relational optimizations across the Abstract Syntax Tree (AST) independently of the invoking programming language.
+* **Spark Connect Architecture**: Modern Databricks environments separate the client REPL from the Spark driver using the Spark Connect gRPC protocol. DataFrame commands are compiled into lightweight, language-agnostic logical plans and sent to the remote driver. This bypasses local Java Virtual Machine (JVM) initialization and removes Py4J IPC serialization overhead.
+* **Lazy Evaluation Semantics**: Pipeline execution is strictly divided into **Transformations** (building a logical DAG without triggering storage I/O) and **Actions** (invoking Catalyst compilation, generating Tungsten bytecode, and materializing the data to storage).
+* **DataFrame Abstraction Layer**: Replacing legacy Resilient Distributed Datasets (RDDs), this architecture mandates strongly typed DataFrames. It uses Whole-Stage Code Generation (WSCG) to apply relational optimizations to the Abstract Syntax Tree (AST), regardless of the host programming language.
 
 ### 61. Extract Customers Data — Simple JSON (17 min)
 
-* **Strict Schema Definition**: Production-grade ingestion patterns necessitate explicitly declared `StructType` schemas, strictly deprecating the dynamic `inferSchema` method. Explicitly binding schemas bypasses the high-latency, multi-pass storage I/O required for metadata resolution and isolates downstream DAG components from unanticipated structural data drift.
+* **Strict Schema Definition**: Production ingestion requires explicit `StructType` schemas, avoiding the dynamic `inferSchema` method. Hardcoding the schema prevents the high-latency, multi-pass I/O scans required for metadata inference and protects downstream dependencies from unexpected schema drift.
 * **Code Implementation Pattern**:
 
 ```python
@@ -45,29 +45,29 @@ df_customers = (spark.read
 
 ### 62. Extract Orders Data — Complex JSON as Text (5 min)
 
-* **Semi-Structured Payload Parsing**: Utilizing imperative string indexing or regular expressions on nested JSON payloads triggers severe JVM CPU overhead. Projecting raw string columns via a native `from_json()` schema expression parses nested attributes inline, bypassing costly string manipulation and mitigating JVM garbage collection pressure.
-* **Relational Normalization**: Deploying the `explode()` generator unpacks nested arrays into discrete vertical rows. Synthesizing this with struct dot notation (`orders.items`) flattens complex hierarchical payloads into normalized, First Normal Form (1NF) relational schemas.
+* **Semi-Structured Payload Parsing**: Using standard string indexing or regex on nested JSON causes significant JVM CPU degradation. Instead, casting raw string columns with a native `from_json()` schema expression parses attributes inline, avoiding expensive string manipulations and lowering garbage collection overhead.
+* **Relational Normalization**: The `explode()` generator flattens nested arrays into individual rows. When combined with struct dot notation (`orders.items`), it normalizes complex hierarchical data into First Normal Form (1NF) relational structures.
 
 ### 63. Extract Memberships Data — Binary File (4 min)
 
-* **Unstructured Asset Ingestion**: Ingesting raw binary payloads (e.g., compressed byte arrays, PDFs, image vectors) directly into distributed executor memory using the `binaryFile` format reader.
-* **Structural Metadata Extraction**: The reader automatically serializes binary assets into a deterministic four-column metadata schema: `path` (`StringType`), `modificationTime` (`TimestampType`), `length` (`LongType`), and `content` (`BinaryType`).
+* **Unstructured Asset Ingestion**: Loading raw binary files (such as PDFs, image vectors, and compressed archives) directly into executor memory via the `binaryFile` format reader.
+* **Structural Metadata Extraction**: The reader maps binary assets to a fixed four-column metadata schema: `path` (`StringType`), `modificationTime` (`TimestampType`), `length` (`LongType`), and `content` (`BinaryType`).
 
 ### 64 & 65. Extract Addresses & Payments (TSV / CSV) (5 min + 8 min)
 
-* **Delimiter & Format Configuration**: Parsing character-separated flat files by calibrating low-level format options (`sep`, `header`, `quote`, `escape`) to properly handle malformed string enclosures and escape sequences.
+* **Delimiter & Format Configuration**: Parsing flat files by configuring low-level format options (`sep`, `header`, `quote`, `escape`) to accurately process escape sequences and malformed enclosures.
 * **Data Corruption Handling Modes**:
 
 | Parsing Mode | Execution Behavior | Data Integrity Impact |
 | --- | --- | --- |
-| **`PERMISSIVE`** *(Default)* | Coerces unparseable values to `NULL` or isolates invalid payloads into a designated `columnNameOfCorruptRecord` attribute. | Preserves maximum readable data without failing executor tasks. |
-| **`DROPMALFORMED`** | Discards anomalous records entirely during the initial I/O scan phase. | Emits strictly compliant rows, resulting in silent data truncation for malformed records. |
-| **`FAILFAST`** | Immediately aborts the Spark job upon detecting a structural anomaly. | Throws a fatal runtime exception and fails the dependent DAG task. |
+| **`PERMISSIVE`** *(Default)* | Converts unparseable values to `NULL` or routes invalid payloads to a specific `columnNameOfCorruptRecord` column. | Retains maximum readable data without crashing executor tasks. |
+| **`DROPMALFORMED`** | Completely drops anomalous records during the initial I/O read phase. | Yields strictly compliant rows, but causes silent data loss for malformed entries. |
+| **`FAILFAST`** | Instantly aborts the Spark job when a structural anomaly is detected. | Triggers a fatal runtime exception, failing the associated DAG task. |
 
 ### 66. Extract Refunds Data — SQL Table via JDBC (4 min)
 
-* **Secret Management Integration**: Abstracting operational credentials utilizing Databricks Secret Scopes (`dbutils.secrets.get()`). This enforces secure credential injection, preventing plaintext authentication strings from surfacing in source control repositories or Spark UI execution telemetry.
-* **Concurrent Multi-Executor Reads**: Unconfigured JDBC extractions route through a single network socket on a lone executor core, inducing an immediate throughput bottleneck. Defining numeric partition boundaries forces parallel socket connections across distributed worker cores, fully saturating available network bandwidth.
+* **Secret Management Integration**: Securing operational credentials using Databricks Secret Scopes (`dbutils.secrets.get()`). This ensures safe credential injection and prevents plaintext passwords from leaking into source control or Spark UI logs.
+* **Concurrent Multi-Executor Reads**: By default, JDBC extractions route through a single network socket on one executor core, causing an immediate bottleneck. Configuring numeric partition boundaries establishes parallel socket connections across distributed workers, saturating available network bandwidth.
 * **Code Implementation Pattern**:
 
 ```python
@@ -90,9 +90,9 @@ df_refunds = (spark.read
 
 ## Important Exam Considerations
 
-* **Transformation Lineage Classification**: Narrow transformations (`select()`, `filter()`, `withColumn()`) execute locally within partition boundaries without triggering inter-node data transfers. Wide transformations (`groupBy()`, `join()`, `distinct()`, `repartition()`) necessitate an `Exchange` physical operator, forcing a cluster-wide data shuffle that establishes rigid physical boundaries between execution stages.
-* **Broadcast Join Topologies**: When evaluating joins between massive fact tables and diminutive dimension tables (governed by the $\le 10\text{ MB}$ `spark.sql.autoBroadcastJoinThreshold`), utilizing a `broadcast(small_df)` hint forces total replication of the dimension dataset across all executors. This converts a high-latency Sort-Merge Join (SMJ) into a highly performant Broadcast Hash Join (BHJ), entirely averting the network shuffle phase.
-* **Partition Size Heuristics**: Over-partitioning triggers severe object store metadata throttling and task scheduling overhead, whereas under-partitioning induces CPU starvation and Out-Of-Memory (`OOM`) JVM exceptions. Optimal physical file blocks for partition tuning in production Delta Lake environments must be maintained between 100 MB and 1 GB per Parquet file.
+* **Transformation Lineage Classification**: Narrow transformations (`select()`, `filter()`, `withColumn()`) run locally within partition boundaries without inter-node data transfers. Wide transformations (`groupBy()`, `join()`, `distinct()`, `repartition()`) require an `Exchange` physical operator, forcing a cluster-wide data shuffle that creates hard physical stage boundaries.
+* **Broadcast Join Topologies**: When joining massive fact tables with small dimension tables (typically under 10 MB based on the `spark.sql.autoBroadcastJoinThreshold`), using a `broadcast(small_df)` hint replicates the dimension dataset across all executors. This turns a slow Sort-Merge Join (SMJ) into a highly efficient Broadcast Hash Join (BHJ), bypassing the network shuffle phase.
+* **Partition Size Heuristics**: Over-partitioning causes object store metadata throttling and task scheduling delays, while under-partitioning leads to CPU starvation and Out-Of-Memory (`OOM`) exceptions. For production Delta Lake environments, target physical file blocks between 100 MB and 1 GB per Parquet file.
 
 ---
 
