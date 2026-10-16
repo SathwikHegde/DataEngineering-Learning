@@ -1,8 +1,8 @@
 # Section 24: Databricks SQL Warehouses & Serving Layers
 
-This module transitions the architectural focus to the serving, presentation, and consumption tiers of the Lakehouse paradigm utilizing Databricks SQL (DB SQL). Over the course of 34 minutes, this section details the configuration of optimized analytical compute instances and the materialization of native business intelligence (BI) artifacts directly atop Delta tables, eliminating the architectural redundancy of exporting data to legacy data warehousing systems.
+This module transitions the architectural focus to the serving, presentation, and consumption tiers of the Lakehouse paradigm utilizing Databricks SQL (DB SQL). Spanning 34 minutes, this section details the configuration of optimized analytical compute instances and the materialization of native business intelligence (BI) artifacts directly atop Delta tables, neutralizing the architectural redundancy of exporting data to legacy external data warehouses.
 
-Refer to `image_5de8a2.png` for the topological dependency graph and curriculum sequencing.
+Refer to `image_5de8a2.png` for the topological dependency graph and execution sequencing.
 
 ---
 
@@ -18,7 +18,7 @@ Refer to `image_5de8a2.png` for the topological dependency graph and curriculum 
 
 ### 151. Databricks SQL Warehouse Overview (7 min)
 
-* **The Unified Serving Tier**: Databricks SQL bridges the architectural gap between raw data lakes and analytical consumption, enabling corporate BI tools (e.g., Power BI, Tableau) to execute queries directly against the Lakehouse via JDBC/ODBC connectors.
+* **The Unified Serving Tier**: Databricks SQL bridges the architectural gap between raw data lakes and analytical consumption, enabling corporate BI tools (e.g., Power BI, Tableau) to execute queries directly against the Lakehouse via native JDBC/ODBC connectors.
 * **Compute Optimization Heuristics**: In contrast to general-purpose data engineering clusters optimized for long-running batch ETL execution, a SQL Warehouse is explicitly engineered for low-latency query compilation, high user concurrency, and vectorized aggregation generation.
 * **Serverless Execution Architecture**: Analyzing the serverless compute model. By decoupling execution from the client workspace and provisioning compute instances instantaneously within Databricks-managed cloud containers, cluster initialization latency is reduced to sub-second thresholds.
 
@@ -60,4 +60,4 @@ Refer to `image_5de8a2.png` for the topological dependency graph and curriculum 
 
 ---
 
-[← Back to Section 23: Databricks Automation Bundles (DABs)](https://www.google.com/search?q=./section23-readme.md&utm_source=gemini) | [Next Section: Section 25: Certification Exam Guide & Practice Exam →](https://www.google.com/search?q=./section25-readme.md&utm_source=gemini)
+[← Back to Section 23: Databricks Automation Bundles (DABs)](https://www.google.com/search?q=./section23-readme.md) | [Next Section: Section 25: Certification Exam Guide & Practice Exam →](https://www.google.com/search?q=./section25-readme.md)
