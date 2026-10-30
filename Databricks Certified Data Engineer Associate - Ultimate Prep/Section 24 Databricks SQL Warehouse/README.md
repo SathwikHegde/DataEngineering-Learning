@@ -1,6 +1,6 @@
 # Section 24: Databricks SQL Warehouses & Serving Layers
 
-This module transitions the architectural focus to the serving, presentation, and consumption tiers of the Lakehouse paradigm utilizing Databricks SQL (DB SQL). Spanning 34 minutes, this section details the configuration of optimized analytical compute instances and the materialization of native business intelligence (BI) artifacts directly atop Delta tables, neutralizing the architectural redundancy of exporting data to legacy external data warehouses.
+This module transitions the architectural focus to the serving, presentation, and consumption tiers of the Lakehouse paradigm utilizing Databricks SQL (DB SQL). Spanning 34 minutes, this section details the provisioning of optimized analytical compute instances and the materialization of native business intelligence (BI) artifacts directly atop Delta tables, eliminating the architectural redundancy of exporting data to legacy external data warehouses.
 
 Refer to `image_5de8a2.png` for the topological dependency graph and execution sequencing.
 
@@ -18,24 +18,24 @@ Refer to `image_5de8a2.png` for the topological dependency graph and execution s
 
 ### 151. Databricks SQL Warehouse Overview (7 min)
 
-* **The Unified Serving Tier**: Databricks SQL bridges the architectural gap between raw data lakes and analytical consumption, enabling corporate BI tools (e.g., Power BI, Tableau) to execute queries directly against the Lakehouse via native JDBC/ODBC connectors.
-* **Compute Optimization Heuristics**: In contrast to general-purpose data engineering clusters optimized for long-running batch ETL execution, a SQL Warehouse is explicitly engineered for low-latency query compilation, high user concurrency, and vectorized aggregation generation.
-* **Serverless Execution Architecture**: Analyzing the serverless compute model. By decoupling execution from the client workspace and provisioning compute instances instantaneously within Databricks-managed cloud containers, cluster initialization latency is reduced to sub-second thresholds.
+* **The Unified Serving Tier**: Databricks SQL bridges the architectural gap between raw data lakes and analytical consumption, enabling enterprise BI clients (e.g., Power BI, Tableau) to execute queries directly against the Lakehouse via native JDBC/ODBC connectors.
+* **Compute Optimization Heuristics**: Unlike general-purpose data engineering clusters optimized for long-running batch ETL execution, SQL Warehouses are explicitly engineered for low-latency query compilation, high user concurrency, and vectorized aggregation generation.
+* **Serverless Execution Architecture**: Evaluating the serverless compute model. By decoupling execution from the client workspace and provisioning compute instances instantaneously within Databricks-managed cloud containers, cluster initialization latency is reduced to sub-second thresholds.
 
 ### 152. Create SQL Warehouse (11 min)
 
-* **Endpoint Instantiation**: Sequential execution of creating and configuring endpoint resources within the SQL Persona UI.
-* **Vertical Compute Sizing**: Defining compute capacities via standardized T-shirt metrics (`XX-Small` to `4X-Large`). This abstracts manual Virtual Machine (VM) configuration, directly aligning hardware specifications with anticipated query AST complexity.
+* **Endpoint Instantiation**: Sequential provisioning and configuration of endpoint resources within the Databricks SQL control plane.
+* **Vertical Compute Sizing**: Allocating compute capacity via standardized T-shirt parameters (`XX-Small` to `4X-Large`). This abstracts underlying Virtual Machine (VM) provisioning, directly correlating hardware boundaries with anticipated query AST complexity.
 * **Horizontal Scaling & Autotermination Boundaries**:
 * **Scaling Factor**: Defining explicit minimum and maximum cluster boundaries to enable dynamic horizontal replication, accommodating high-concurrency analytical workloads.
-* **Autotermination**: Enforcing strict idle timeouts (e.g., 5–10 minutes) to immediately terminate inactive endpoints, mitigating unnecessary Databricks Unit (DBU) consumption.
+* **Autotermination**: Enforcing strict idle timeouts (e.g., 5–10 minutes) to immediately deallocate inactive endpoints, neutralizing unnecessary Databricks Unit (DBU) consumption.
 
 
 
 ### 153. Databricks SQL — Query & Visualization (8 min)
 
 * **The SQL Editor Environment**: Utilizing the production-grade query editor featuring real-time schema introspection, execution snippets, multi-tab execution contexts, and centralized query history telemetry.
-* **Integrated Visualization Engine**: Compiling tabular execution results into interactive analytical components—including time-series series, cohort tracking funnels, geospatial maps, and categorical distributions—natively within the Databricks workspace plane.
+* **Integrated Visualization Engine**: Compiling tabular execution results into interactive analytical components—including time-series tracking, cohort funnels, geospatial maps, and categorical distributions—natively within the Databricks workspace plane.
 
 ### 154. Databricks — SQL Alerts (8 min)
 
@@ -47,7 +47,7 @@ Refer to `image_5de8a2.png` for the topological dependency graph and execution s
 ## Important Exam Considerations
 
 * **Vertical vs. Horizontal Compute Scaling**: Certification parameters strictly evaluate scaling mechanics:
-* **Vertical Scaling (T-Shirt Size)**: Upgrading from a `Medium` to a `Large` augments the underlying VM hardware specifications (vCPU/RAM), accelerating the execution time of isolated, resource-intensive queries.
+* **Vertical Scaling (T-Shirt Size)**: Upgrading from a `Medium` to a `Large` augments the underlying VM hardware specifications (vCPU/RAM), accelerating the execution latency of isolated, resource-intensive queries.
 * **Horizontal Scaling (Scaling Factor)**: Increasing the maximum cluster bounds provisions parallel warehouse replicas dynamically, ensuring low latency for high volumes of concurrent analytical users executing discrete queries.
 
 
@@ -61,3 +61,5 @@ Refer to `image_5de8a2.png` for the topological dependency graph and execution s
 ---
 
 [← Back to Section 23: Databricks Automation Bundles (DABs)](https://www.google.com/search?q=./section23-readme.md) | [Next Section: Section 25: Certification Exam Guide & Practice Exam →](https://www.google.com/search?q=./section25-readme.md)
+
+Are there any final modules or repository root documents remaining that require this level of technical refinement?
